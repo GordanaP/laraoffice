@@ -1,5 +1,7 @@
 body {color: #555}
 
+a { text-decoration: none !important; color: inherit}
+
 /*
  * Form feedback fields(JS formvalidation)
  */
@@ -58,3 +60,4 @@ form label {font-weight: bold}
 }
 .user-panel form .form-control-feedback {top: 25px}
 .user-panel form .form-group-avatar .form-control-feedback {top: 0px}
+
