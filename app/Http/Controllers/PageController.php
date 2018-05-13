@@ -35,7 +35,9 @@ class PageController extends Controller
      */
     public function home()
     {
-        return view('home');
+        $profiles = \App\Profile::all();
+
+        return view('home', compact('profiles'));
     }
 
     /**

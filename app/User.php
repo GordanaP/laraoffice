@@ -105,4 +105,8 @@ class User extends Authenticatable
         return static::where($field, $value)->firstOrFail();
     }
 
+    public function appointments()
+    {
+        return $this->hasManyThrough('App\Appointment', 'App\Profile');
+    }
 }

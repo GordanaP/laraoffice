@@ -34,4 +34,15 @@ class Profile extends Model
 
         $user->profile()->save($profile);
     }
+
+    /**
+     * Get the appointments that belong to the profile.
+     *
+     * @return  \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
 }
