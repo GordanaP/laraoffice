@@ -55,7 +55,7 @@ function selected($current, $selected)
 }
 
 /**
- * Set avatar.
+ * Set an avatar.
  *
  * @param \App\User $user
  * @return string
@@ -67,7 +67,38 @@ function setAvatar($user)
     return 'images/avatars/'.$avatar;
 }
 
+/**
+ * Set the avatar name.
+ *
+ * @param int $userId
+ * @param string $file
+ * return string
+ */
 function setAvatarName($userId, $file)
 {
     return $userId.'-'.$file->getClientOriginalName();
+}
+
+/**
+ * Set the today's appointment start time.
+ *
+ * @param string $day
+ * @param string $hour
+ * @return string
+ */
+function appointmentStart($day, $hour)
+{
+    return $day->format('Y-m-d'). ' ' .$hour.':00';
+}
+
+/**
+ * Set the first name.
+ *
+ * @param  string $firstName
+ * @param  string $lastName
+ * @return string
+ */
+function fullName($firstName, $lastName)
+{
+    return $firstName .' ' .$lastName;
 }

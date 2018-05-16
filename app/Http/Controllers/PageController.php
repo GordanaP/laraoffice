@@ -35,7 +35,7 @@ class PageController extends Controller
      */
     public function home()
     {
-        $profiles = \App\Profile::all();
+        $profiles = \App\Profile::all()->load('appointments.patient');
 
         return view('home', compact('profiles'));
     }
