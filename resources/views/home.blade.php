@@ -23,7 +23,7 @@
                             {{ $hour }}
                         </td>
                         @foreach ($profiles as $profile)
-                            @forelse ($profile->appointments()->today($hour)->get() as $appointment)
+                            @forelse ($profile->getAppointments(today(), $hour) as $appointment)
                                 <td>
                                     {{ fullName($appointment->patient->f_name, $appointment->patient->l_name) }}
                                 </td>

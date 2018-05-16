@@ -45,4 +45,14 @@ class Profile extends Model
         return $this->hasMany(Appointment::class);
     }
 
+    /**
+     * Get today's appointments stratified by start time.
+     *
+     * @param  string $hour
+     * @return array
+     */
+    public function getAppointments($day, $hour)
+    {
+        return $this->appointments->where('start', appointmentStart($day, $hour));
+    }
 }

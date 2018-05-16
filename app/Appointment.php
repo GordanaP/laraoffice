@@ -41,17 +41,4 @@ class Appointment extends Model
     {
         return $this->belongsTo(Patient::class);
     }
-
-    /**
-     * Get the today's appointments stratified by start time.
-     *
-     * @param  mixed $query
-     * @param  string $value
-     * @return mixed
-     */
-    public function scopeToday($query, $value)
-    {
-        return $query->where('start', appointmentStart(Carbon::today(), $value));
-    }
-
 }

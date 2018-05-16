@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\ModelFinder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PageController extends Controller
 {
+    use ModelFinder;
+
     /**
      * Create a new controller instance.
      *
@@ -35,7 +38,7 @@ class PageController extends Controller
      */
     public function home()
     {
-        $profiles = \App\Profile::all()->load('appointments.patient');
+        $profiles = $this->getProfiles();
 
         return view('home', compact('profiles'));
     }

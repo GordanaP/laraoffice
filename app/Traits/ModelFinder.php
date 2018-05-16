@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Profile;
 use App\Role;
 use App\User;
 
@@ -25,5 +26,15 @@ trait ModelFinder
     public function getUsers()
     {
         return User::with('roles:name')->with('avatar')->get();
+    }
+
+    /**
+     * Get all profiles.
+     *
+     * @return array
+     */
+    public function getProfiles()
+    {
+        return Profile::all()->load('appointments.patient');
     }
 }
