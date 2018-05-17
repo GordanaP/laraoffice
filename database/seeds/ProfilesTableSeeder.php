@@ -1,5 +1,6 @@
 <?php
 
+use App\User;
 use Illuminate\Database\Seeder;
 
 class ProfilesTableSeeder extends Seeder
@@ -11,6 +12,11 @@ class ProfilesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Profile::class)->create();
+        $users = User::all();
+
+        foreach ($users as $user)
+        {
+            factory(App\Profile::class)->create();
+        }
     }
 }

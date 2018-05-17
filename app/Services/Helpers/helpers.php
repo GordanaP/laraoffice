@@ -1,7 +1,5 @@
 <?php
 
-use App\User;
-
 /**
  * Create the response message.
  *
@@ -101,4 +99,69 @@ function appointmentStart($day, $hour)
 function fullName($firstName, $lastName)
 {
     return $firstName .' ' .$lastName;
+}
+
+/**
+ * Get day time formatted.
+ *
+ * @return [type] [description]
+ */
+function dailyTime()
+{
+    return today()->toFormattedDateString();
+}
+
+/**
+ * Determine if day time is morning
+ *
+ * @return bool
+ */
+function morning($start, $breakpoint)
+{
+    return  timeNow() >= $start && timeNow() < $breakpoint;
+}
+
+/**
+ * Determine if day time is afternoon
+ *
+ * @return bool
+ */
+function afternoon($breakpoint, $end)
+{
+    return  timeNow() >= $breakpoint && timeNow() < $end;
+}
+
+/**
+ * Get the hour of the day.
+ *
+ * @return string
+ */
+function timeNow($format = 'H')
+{
+    return now(config('app.timezone'))->format($format);
+}
+
+/**
+ * Get the working hours stratified by the day time.
+ *
+ * @return array
+ */
+function workingHours($start, $breakpoint, $end)
+{
+    $workingHours = collect(WorkingHours::all());
+
+    if(morning($start, $breakpoint))
+    {
+        $filteredHours = $workingHours->filter(function ($value, $key) use($start, $breakpoint, $end) {
+            return $value >= $start && $value < $breakpoint;
+        });
+    }
+    elseif (afternoon($breakpoint, $end))
+    {
+        $filteredHours = $workingHours->filter(function ($value, $key) use($start, $breakpoint, $end) {
+            return $value >= $breakpoint && $value < $end;
+        });
+    }
+
+    return $filteredHours->all();
 }
