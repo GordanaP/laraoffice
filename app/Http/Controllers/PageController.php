@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Traits\ModelFinder;
+use App\WorkDay;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,7 +39,7 @@ class PageController extends Controller
      */
     public function home()
     {
-        $profiles = $this->getProfiles();
+        $profiles = WorkDay::profilesOnDuty(9, 15, 24);
 
         return view('home', compact('profiles'));
     }

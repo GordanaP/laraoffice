@@ -116,7 +116,7 @@ function dailyTime()
  *
  * @return bool
  */
-function morning($start, $breakpoint)
+function morningShift($start, $breakpoint)
 {
     return  timeNow() >= $start && timeNow() < $breakpoint;
 }
@@ -126,7 +126,7 @@ function morning($start, $breakpoint)
  *
  * @return bool
  */
-function afternoon($breakpoint, $end)
+function afternoonShift($breakpoint, $end)
 {
     return  timeNow() >= $breakpoint && timeNow() < $end;
 }
@@ -150,13 +150,13 @@ function workingHours($start, $breakpoint, $end)
 {
     $workingHours = collect(WorkingHours::all());
 
-    if(morning($start, $breakpoint))
+    if(morningShift($start, $breakpoint))
     {
         $filteredHours = $workingHours->filter(function ($value, $key) use($start, $breakpoint, $end) {
             return $value >= $start && $value < $breakpoint;
         });
     }
-    elseif (afternoon($breakpoint, $end))
+    elseif (afternoonShift($breakpoint, $end))
     {
         $filteredHours = $workingHours->filter(function ($value, $key) use($start, $breakpoint, $end) {
             return $value >= $breakpoint && $value < $end;

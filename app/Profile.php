@@ -55,4 +55,14 @@ class Profile extends Model
     {
         return $this->appointments->where('start', appointmentStart($day, $hour));
     }
+
+    /**
+     * Get the work days that belong to the profile.
+     *
+     * @return  \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function workdays()
+    {
+        return $this->belongsToMany(WorkDay::class)->withPivot('start', 'end');
+    }
 }
