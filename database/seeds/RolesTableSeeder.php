@@ -1,5 +1,7 @@
 <?php
 
+use App\Role;
+use App\User;
 use Illuminate\Database\Seeder;
 
 class RolesTableSeeder extends Seeder
@@ -19,5 +21,9 @@ class RolesTableSeeder extends Seeder
                 'name' => $role
             ]);
         }
+
+        $role = Role::find(2);
+
+        User::first()->roles()->sync($role);
     }
 }

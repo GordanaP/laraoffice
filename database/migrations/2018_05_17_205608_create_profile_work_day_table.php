@@ -14,14 +14,16 @@ class CreateProfileWorkDayTable extends Migration
     public function up()
     {
         Schema::create('profile_work_day', function (Blueprint $table) {
-            $table->unsignedInteger('profile_id')->index();
-            $table->foreign('profile_id')->references('id')->on('profiles')->onDelete('cascade');
 
-            $table->unsignedInteger('work_day_id')->index();
-            $table->foreign('work_day_id')->references('id')->on('work_days')->onDelete('cascade');
+            $table->unsignedInteger('profile_id');
+            // $table->foreign('profile_id')->references('id')->on('profiles')->onDelete('cascade');
+
+            $table->unsignedInteger('work_day_id');
+            // $table->foreign('work_day_id')->references('id')->on('work_days')->onDelete('cascade');
 
             $table->string('start');
             $table->string('end');
+
             $table->primary(['profile_id', 'work_day_id', 'start', 'end']);
         });
     }

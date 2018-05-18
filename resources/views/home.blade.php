@@ -18,19 +18,6 @@
                 @endforeach
             </thead>
             <tbody>
-                {{-- @php
-                    $collection = collect(WorkingHours::all());
-                    $profile = \App\Profile::first();
-                @endphp --}}
-
-                {{-- @foreach ($profile->workdays()->where('work_day_id', 4)->get() as $day)
-                    {{$day->pivot->start}}
-                    @if ($day->pivot->start > '17:00')
-                        YES
-                    @else
-                        NO
-                    @endif
-                @endforeach --}}
                 @foreach (workingHours(9,15,24) as $hour)
                     <tr>
                         <td class="bg-grey-lightest">
@@ -39,8 +26,7 @@
                         @foreach ($profiles as $profile)
                             @forelse ($profile->getAppointments(today(config('app.timezone')), $hour) as $appointment)
                                 <td
-                                    @foreach ($profile->workdays()->where('work_day_id', 4)->get() as $day)
-                                       {{$day->pivot->start}}
+                                    @foreach ($profile->workdays()->where('work_day_id', 5)->get() as $day)
                                        @if ($hour < $day->pivot->start || $hour > $day->pivot->end )
                                            class = "bg-grey"
                                        @endif
