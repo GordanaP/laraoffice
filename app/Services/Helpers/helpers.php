@@ -165,3 +165,14 @@ function workingHours($start, $breakpoint, $end)
 
     return $filteredHours->all();
 }
+
+/**
+ * Determine the day of week.
+ *
+ * @param  \Carbon\Carbon $day
+ * @return int
+ */
+function weekdayId($day)
+{
+    return $day->dayOfWeek;
+}

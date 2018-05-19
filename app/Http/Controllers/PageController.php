@@ -39,7 +39,11 @@ class PageController extends Controller
      */
     public function home()
     {
-        $profiles = WorkDay::profilesOnDuty(9, 15, 24);
+        // $profile = \App\Profile::first()->workdays()->where('work_day_id', 6)->first();
+        $profile = \App\WorkDay::find(6)->profiles()->where('profile_id', 1)->first();
+
+
+        $profiles = WorkDay::profilesOnDuty(5, 15, 24);
 
         return view('home', compact('profiles'));
     }

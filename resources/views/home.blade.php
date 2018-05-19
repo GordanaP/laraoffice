@@ -2,7 +2,6 @@
 
 @section('title', "| Today's Appointments")
 
-
 @section('content')
     <div class="card card-default bg-yellow">
         <table class="table table-bordered bg-white mb-0 daily-calendar">
@@ -18,24 +17,25 @@
                 @endforeach
             </thead>
             <tbody>
-                @foreach (workingHours(9,15,24) as $hour)
+                @foreach (workingHours(5,15,24) as $hour)
                     <tr>
                         <td class="bg-grey-lightest">
                             {{ $hour }}
                         </td>
                         @foreach ($profiles as $profile)
                             @forelse ($profile->getAppointments(today(config('app.timezone')), $hour) as $appointment)
-                                <td
-                                    @foreach ($profile->workdays()->where('work_day_id', 5)->get() as $day)
-                                       @if ($hour < $day->pivot->start || $hour > $day->pivot->end )
-                                           class = "bg-grey"
-                                       @endif
-                                   @endforeach
-                                >
+                                <td>
                                     {{ fullName($appointment->patient->f_name, $appointment->patient->l_name) }}
                                 </td>
                             @empty
-                                <td></td>
+                                <td
+                                    @foreach ($profile->workdays()->where('work_day_id', weekdayId(today()))->get() as $day)
+                                        @if ($hour < $day->pivot->start || $hour > $day->pivot->end)
+                                            class="bg-grey"
+                                        @endif
+                                    @endforeach
+                                >
+                                </td>
                             @endforelse
                         @endforeach
                     </tr>
