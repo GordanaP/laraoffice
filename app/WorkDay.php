@@ -28,7 +28,7 @@ class WorkDay extends Model
      */
     public static function profilesOnDuty($start, $breakpoint, $end)
     {
-        $today = today()->dayOfWeek;
+        $today = today()->dayOfWeekIso;
 
         if(morningShift($start, $breakpoint))
         {

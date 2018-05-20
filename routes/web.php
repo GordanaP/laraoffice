@@ -90,4 +90,7 @@ Route::prefix('admin')->namespace('User')->name('admin.')->middleware('auth.admi
         'parameters' => ['avatars' => 'userId'],
         'only' => ['show', 'update']
     ]);
+
 });
+
+Route::resource('appointments', 'AppointmentController');

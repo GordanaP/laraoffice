@@ -3,6 +3,9 @@
 @section('title', "| Today's Appointments")
 
 @section('content')
+
+    <a href="{{ route('appointments.create') }}" class="btn btn-info mb-3">New appointment</a>
+
     <div class="card card-default bg-yellow">
         <table class="table table-bordered bg-white mb-0 daily-calendar">
             <p class="p-3 font-bold text-lg">{{ dailyTime() }}</p>
