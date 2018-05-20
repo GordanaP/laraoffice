@@ -90,7 +90,9 @@ Route::prefix('admin')->namespace('User')->name('admin.')->middleware('auth.admi
         'parameters' => ['avatars' => 'userId'],
         'only' => ['show', 'update']
     ]);
-
 });
 
-Route::resource('appointments', 'AppointmentController');
+Route::name('appointments.index')->get('appointments/{profile?}', 'AppointmentController@index');
+Route::name('appointments.store')->post('appointments/{profile}', 'AppointmentController@store');
+Route::name('appointments.update')->put('appointments/{profile}/{appointment}', 'AppointmentController@update');
+Route::name('appointments.destroy')->delete('appointments/{profile}/{appointment}', 'AppointmentController@destroy');

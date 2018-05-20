@@ -68,10 +68,10 @@ class User extends Authenticatable
      *
      * @return string
      */
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
+    // public function getRouteKeyName()
+    // {
+    //     return 'slug';
+    // }
 
     /**
      * Format the account creation date.

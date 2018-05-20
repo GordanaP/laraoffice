@@ -14,9 +14,26 @@ class AppointmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Profile $profile)
     {
-        //
+        if (request()->ajax())
+        {
+            if (request()->is('appointments/'.$profile->id))
+            {
+                return $profile->appointments;
+            }
+            else
+            {
+                return Appointment::all();
+            }
+        }
+
+        $profiles = Profile::with('user')->orderBy('name', 'asc')->get();
+
+        return view('appointments.index')->with([
+            'profile' => $profile,
+            'profiles' => $profiles,
+        ]);
     }
 
     /**
@@ -26,9 +43,7 @@ class AppointmentController extends Controller
      */
     public function create()
     {
-        $profiles = Profile::orderBy('name', 'asc')->get();
-
-        return view('appointments.create', compact('profiles'));
+        //
     }
 
     /**

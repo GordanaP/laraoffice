@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <a href="{{ route('appointments.create') }}" class="btn btn-info mb-3">New appointment</a>
+    <a href="{{ route('appointments.index') }}" class="btn btn-info mb-3">New appointment</a>
 
     <div class="card card-default bg-yellow">
         <table class="table table-bordered bg-white mb-0 daily-calendar">
