@@ -13,7 +13,7 @@
                 <th>Time</th>
                 @foreach ($profiles as $profile)
                     <th>
-                        <a href="#" class="uppercase">
+                        <a href="{{ route('appointments.index', $profile) }}" class="uppercase">
                             {{ $profile->name }}
                         </a>
                     </th>

@@ -15,7 +15,6 @@
 @endsection
 
 @section('side')
-
     <h4 class="text-uppercase mb-4 mt-1">Doctors</h4>
     @foreach ($profiles as $userProfile)
         <p>
@@ -29,7 +28,6 @@
 @section('content')
 
     <div id="appointmentsCalendar"></div>
-
 @endsection
 
 @section('scripts')
@@ -48,7 +46,8 @@
         var calendar = $('#appointmentsCalendar')
 
         var profileId = "{{ $profile->id }}",
-        appointmentsUrl = '/appointments/' + profileId;
+            appointmentsUrl = '/appointments/' + profileId,
+            profileWorkdays = {{ $profile->workdays->pluck('id') }}
 
         calendar.fullCalendar({
             header: {
@@ -88,7 +87,15 @@
                     color: '#ffae00',
                     textColor: 'black'
                 }
-            ]
+            ],
+            dayRender: function (date, cell) {
+
+                var day = moment(date).day()
+
+                if($.inArray(day, profileWorkdays) !== -1) {
+                    cell.css("background-color", "#E3FCEC");
+                }
+            },
         })
 
     </script>
