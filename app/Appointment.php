@@ -41,4 +41,23 @@ class Appointment extends Model
     {
         return $this->belongsTo(Patient::class);
     }
+
+    /**
+     * Create a new appointment.
+     *
+     * @param  array $data    [description]
+     * @param  App\Patient $patient
+     * @return App\Appointment
+     */
+    public static function createNew($data, $patient)
+    {
+        $appointment = new static;
+
+        $appointment->start = getEventDate($data['appDate'], $data['appStart']);
+        $appointment->profile()->associate($data['profile_id']);
+
+        $patient->appointments()->save($appointment);
+
+        return $appointment;
+    }
 }

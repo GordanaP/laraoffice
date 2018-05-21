@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 /**
  * Create the response message.
  *
@@ -175,4 +177,17 @@ function workingHours($start, $breakpoint, $end)
 function weekdayId($day)
 {
     return $day->dayOfWeek;
+}
+
+/**
+ * Get the Carbon instance of the event dat.
+ *
+ * @param  string $date
+ * @param  string $time
+ * @param  string $format
+ * @return string
+ */
+function getEventDate($date, $time, $format='Y-m-d H:i')
+{
+    return Carbon::createFromFormat($format, $date.' '.$time)->toDateTimeString();
 }

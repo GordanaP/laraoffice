@@ -56,12 +56,9 @@ class AppointmentController extends Controller
     {
         $patient = Patient::createNew($request);
 
-        $patient->profiles()->attach($request->doctor, [
-            'start' => now(),
-            'end' => now()->addMinutes(30)
-        ]);
+        Appointment::createNew($request, $patient);
 
-        return back();
+        return message('A new appointment has been created');
     }
 
     /**

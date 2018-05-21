@@ -2,14 +2,18 @@
 
 <div class="form-group">
     <label for="profile">Doctor</label>
-    <select name="profile_id" id="profile_id" class="form-control rounded-none">
-        <option>Select a doctor</option>
-        @foreach ($profiles as $profile)
-            <option value="profile_id">
-                {{ $profile->name }}
-            </option>
-        @endforeach
-    </select>
+    @if (Request::is('appointments/*'))
+        <input type="text" name="profile_id" id="profile_id" class="form-control rounded-none" />
+    @else
+        <select name="profile_id" id="profile_id" class="form-control rounded-none">
+            <option>Select a doctor</option>
+            @foreach ($profiles as $profile)
+                <option value="{{ $profile->id }}">
+                    {{ $profile->name }}
+                </option>
+            @endforeach
+        </select>
+    @endif
 </div>
 
 <div class="row">
@@ -46,14 +50,14 @@
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            <label for="f_name">First name</label>
-            <input type="text" name="f_name" id="f_name" class="form-control rounded-none" placeholder="Enter first name" />
+            <label for="firstName">First name</label>
+            <input type="text" name="firstName" id="firstName" class="form-control rounded-none" placeholder="Enter first name" />
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-group">
-            <label for="l_name">Last name</label>
-            <input type="text" name="l_name" id="l_name" class="form-control rounded-none" placeholder="Enter last name" />
+            <label for="lastName">Last name</label>
+            <input type="text" name="lastName" id="lastName" class="form-control rounded-none" placeholder="Enter last name" />
         </div>
     </div>
 </div>

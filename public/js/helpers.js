@@ -509,4 +509,8 @@ function getCheckedValue(form, fieldName)
     return form.find('input[name="'+fieldName+'"]:checked').val()
 }
 
+function getProfileId(profileId, profileField)
+{
+    return profileId ? profileId : profileField.val()
+}
 

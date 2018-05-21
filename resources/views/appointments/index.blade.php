@@ -46,22 +46,26 @@
 
         var calendar = $('#appointmentsCalendar'),
             profileId = "{{ $profile->id }}",
+            profileName = "{{ $profile->name }}",
             appointmentsUrl = '/appointments/' + profileId,
-            profileWorkdays = {{ $profile->workdays->pluck('id') }},
+            profileWorkdays = "{{ $profile->workdays->pluck('id') }}",
             profilesAppInt20 = "{{ \App\Profile::appInterval(20)->pluck('id') }}",
             appModal = $("#appModal"),
             appForm = $("#appForm"),
+            profileField = $("#profile_id"),
             dateField = $("#appDate"),
             startField = $("#appStart"),
             genderField = $("#male"),
+            fNameField = $("#firstName"),
+            lNameField = $("#lastName"),
+            birthday = $("#birthday"),
+            phone = $("#phone"),
             dateFormat = "YYYY-MM-DD",
             timeFormat = "HH:mm",
             appFormFields = ['profile_id', 'gender', 'f_name', 'l_name', 'birthday', 'phone']
 
         appModal.emptyModal(appFormFields)
-        // appModal.on('hidden.bs.modal', function () {
-        //     $(this).find('form').trigger('reset');
-        // })
+        appModal.setAutofocus('profile_id')
 
         calendar.fullCalendar({
             header: {
@@ -120,7 +124,7 @@
 
                 $(".modal-title i").addClass('fa-calendar')
                 $(".modal-title span").text('New appointment')
-                $(".app-button").addClass('bg-indigo-dark text-white').text('Create appointment')
+                $(".app-button").addClass('bg-indigo-dark text-white').text('Create appointment').attr('id', 'createApp')
 
                 // Appointment form
                 var appDate = eventDate(start, dateFormat)
@@ -128,7 +132,38 @@
 
                 dateField.val(appDate);
                 startField.val(appStart);
+                profileField.val(profileName);
             }
+        })
+
+        // Store appointment
+        $(document).on('click', '#createApp', function(){
+
+            var storeAppUrl = "{{ route('appointments.store') }}"
+
+            var appointment = {
+                f_name: fNameField.val(),
+                l_name: lNameField.val(),
+                birthday: birthday.val(),
+                gender: getCheckedValue(appForm, 'gender'),
+                phone: phone.val(),
+                profile_id: getProfileId(profileId, profileField),
+                appDate: dateField.val(),
+                appStart: startField.val(),
+            }
+
+            $.ajax({
+                url: storeAppUrl,
+                type: 'POST',
+                data: appointment,
+                success: function(response)
+                {
+                    successResponse(appModal, response.message)
+
+                    calendar.fullCalendar('renderEvent', appointment)
+                    calendar.fullCalendar('refetchEvents');
+                }
+            })
         })
 
     </script>
