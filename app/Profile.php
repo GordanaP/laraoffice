@@ -63,6 +63,19 @@ class Profile extends Model
      */
     public function workdays()
     {
-        return $this->belongsToMany(WorkDay::class)->withPivot('start', 'end');
+        return $this->belongsToMany(WorkDay::class)->withPivot('start', 'end', 'appInterval');
+    }
+
+    /**
+     * get profiles grouped by appointments intervals
+     *
+     * @param  [int] $mins
+     * @return array
+     */
+    public static function appInterval($mins)
+    {
+        return static::with('workdays')->whereHas('workdays', function ($q) use($mins) {
+            $q->where('appInterval', '=', $mins);
+        })->get();
     }
 }

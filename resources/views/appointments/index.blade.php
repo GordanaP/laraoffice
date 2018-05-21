@@ -18,7 +18,7 @@
     <h4 class="text-uppercase mb-4 mt-1">Doctors</h4>
     @foreach ($profiles as $userProfile)
         <p>
-            <a href="{{ route('appointments.index', $userProfile->user->id) }}">
+            <a href="{{ route('appointments.index', $userProfile->id) }}">
                 {{ $userProfile->name }}
             </a>
         </p>
@@ -28,6 +28,8 @@
 @section('content')
 
     <div id="appointmentsCalendar"></div>
+
+    @include('appointments.partials._appModal')
 @endsection
 
 @section('scripts')
@@ -35,19 +37,24 @@
     <script src="{{ asset('vendor/formvalidation/dist/js/framework/bootstrap.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.17/moment-timezone-with-data.min.js"></script>
-    {{-- <script src="{{ asset('vendor/moment-2.18.1/moment.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('vendor/moment-2.18.1/moment-timezone-with-data.min.js') }}"></script> --}}
     <script src="{{ asset('vendor/fullcalendar-3.9.0/fullcalendar.js') }}"></script>
     <script src="{{ asset('vendor/fullcalendar-3.9.0/gcal.js') }}"></script>
     <script src="{{ asset('vendor/jquery-ui-1.12.1/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('vendor/timepicker-1.6.3/timepicker-addon.js') }}"></script>
 
     <script>
-        var calendar = $('#appointmentsCalendar')
 
-        var profileId = "{{ $profile->id }}",
+        var calendar = $('#appointmentsCalendar'),
+            profileId = "{{ $profile->id }}",
             appointmentsUrl = '/appointments/' + profileId,
-            profileWorkdays = {{ $profile->workdays->pluck('id') }}
+            profileWorkdays = {{ $profile->workdays->pluck('id') }},
+            appModal = $("#appModal"),
+            appForm = $("#appForm"),
+            dateField = $("#appDate"),
+            startField = $("#appStart"),
+            dateFormat = "YYYY-MM-DD",
+            timeFormat = "HH:mm",
+            profilesAppInt20 = "{{ \App\Profile::appInterval(20) }}"
 
         calendar.fullCalendar({
             header: {
@@ -58,8 +65,9 @@
             defaultView: profileId ? 'agendaWeek' : 'month',
             handleWindowResize: true,
             displayEventTime: false,
-            showNonCurrentDates: true,
-            slotDuration: '00:30:00',
+            showNonCurrentDates: true, // out of the current view
+            slotLabelFormat: 'H:mm',
+            slotDuration: slotDuration(profileId, profilesAppInt20, 20),
             firstDay: 1,
             navLinks: true,
             selectHelper: true,
@@ -85,7 +93,7 @@
                 {
                     url : appointmentsUrl,
                     color: '#ffae00',
-                    textColor: 'black'
+                    textColor: 'black',
                 }
             ],
             dayRender: function (date, cell) {
@@ -96,6 +104,22 @@
                     cell.css("background-color", "#E3FCEC");
                 }
             },
+            select: function(start, end, jsEvent, view){
+
+                // Appointment modal
+                appModal.modal('show')
+
+                $(".modal-title i").addClass('fa-calendar')
+                $(".modal-title span").text('New appointment')
+                $(".app-button").addClass('bg-indigo-dark text-white').text('Create appointment')
+
+                // Appointment form
+                var appDate = eventDate(start, dateFormat)
+                var appStart = eventStart(view, start, timeFormat)
+
+                dateField.val(appDate);
+                startField.val(appStart);
+            }
         })
 
     </script>

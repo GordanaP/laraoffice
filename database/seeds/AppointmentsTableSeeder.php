@@ -11,54 +11,67 @@ class AppointmentsTableSeeder extends Seeder
      */
     public function run()
     {
-        $day = today()->format('Y-m-d');
+        $today = today()->format('Y-m-d');
+        $tomorrow = today()->addDay(1)->format('Y-m-d');
 
         factory(App\Appointment::class)->create([
             'profile_id' => 1,
-            'start' => $day .' 15:00:00',
-            'end' => $day .' 15:30:00'
+            'start' => $today .' 15:00:00',
+            'end' => $today .' 15:20:00'
         ]);
 
         factory(App\Appointment::class)->create([
             'profile_id' => 1,
-            'start' => $day .' 16:00:00',
-            'end' => $day .' 16:30:00'
+            'start' => $today .' 15:20:00',
+            'end' => $today .' 15:40:00'
+        ]);
+
+        factory(App\Appointment::class)->create([
+            'profile_id' => 1,
+            'start' => $today .' 16:00:00',
+            'end' => $today .' 16:20:00'
+        ]);
+
+        factory(App\Appointment::class)->create([
+            'profile_id' => 1,
+            'start' => $tomorrow .' 16:00:00',
+            'end' => $tomorrow .' 16:20:00'
         ]);
 
         factory(App\Appointment::class)->create([
             'profile_id' => 2,
-            'start' => $day .' 16:00:00',
-            'end' => $day .' 16:30:00'
+            'start' => $today .' 15:00:00',
+            'end' => $today .' 15:30:00'
         ]);
 
         factory(App\Appointment::class)->create([
             'profile_id' => 3,
-            'start' => $day .' 18:00:00',
-            'end' => $day .' 18:30:00'
+            'start' => $today .' 18:00:00',
+            'end' => $today .' 18:20:00'
         ]);
 
         factory(App\Appointment::class)->create([
             'profile_id' => 4,
-            'start' => $day .' 17:00:00',
-            'end' => $day .' 17:30:00'
+            'start' => $today .' 17:00:00',
+            'end' => $today .' 17:30:00'
         ]);
 
         factory(App\Appointment::class)->create([
             'profile_id' => 5,
-            'start' => $day .' 09:00:00',
-            'end' => $day .' 09:30:00'
+            'start' => $today .' 09:00:00',
+            'end' => $today .' 09:20:00'
         ]);
 
         factory(App\Appointment::class)->create([
             'profile_id' => 6,
-            'start' => $day .' 11:00:00',
-            'end' => $day .' 11:30:00'
+            'start' => $today .' 11:00:00',
+            'end' => $today .' 11:30:00'
         ]);
 
         factory(App\Appointment::class)->create([
             'profile_id' => 8,
-            'start' => $day .' 12:30:00',
-            'end' => $day .' 13:00:00'
+            'start' => $today .' 12:30:00',
+            'end' => $today .' 13:00:00'
         ]);
     }
 }

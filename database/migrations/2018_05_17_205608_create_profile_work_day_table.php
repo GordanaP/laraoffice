@@ -23,6 +23,7 @@ class CreateProfileWorkDayTable extends Migration
 
             $table->string('start');
             $table->string('end');
+            $table->unsignedInteger('appInterval')->default(30);
 
             $table->primary(['profile_id', 'work_day_id', 'start', 'end']);
         });
