@@ -25,12 +25,25 @@ function eventDate(momentDate, dateFormat)
     return momentDate.format(dateFormat)
 }
 
+/**
+ * Get the calendar time interval.
+ *
+ * @param  {int} profileId
+ * @param  {array} profilesInt
+ * @param  {int} intervalMins
+ * @return {string}
+ */
 function slotDuration(profileId, profilesInt, intervalMins)
 {
     return $.inArray(profileId, profilesInt) !== -1 ? appInterval(intervalMins) : appInterval()
 }
 
-
+/**
+ * Get the time interval.
+ *
+ * @param  {int} intervalMins
+ * @return {string}
+ */
 function appInterval(intervalMins=30)
 {
     return '00:'+intervalMins+':00'

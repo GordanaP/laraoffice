@@ -53,7 +53,7 @@
         password.hide()
 
         createAccountModal.setAutofocus('role_id')
-        createAccountModal.emptyModal(accountFields, createAccountForm, auto_password, password)
+        createAccountModal.emptyModal(accountFields, createAccountForm)
 
         // Edit account
         var editAccountModal = $('#editAccountModal')
@@ -63,7 +63,7 @@
         _password.hide()
 
         editAccountModal.setAutofocus('_role_id')
-        editAccountModal.emptyModal(accountFields, editAccountForm, _unchanged_password, _password)
+        editAccountModal.emptyModal(accountFields, editAccountForm)
 
         // Revoke roles
         var revokeRolesModal = $('#revokeRolesModal')

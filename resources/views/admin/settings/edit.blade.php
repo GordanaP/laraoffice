@@ -47,7 +47,7 @@
         _password.hide()
 
         editAccountModal.setAutofocus('_role_id')
-        editAccountModal.emptyModal(accountFields, editAccountForm, _unchanged_password, _password)
+        editAccountModal.emptyModal(accountFields, editAccountForm)
 
         // Profile
         var profileModal = $('#profileModal')

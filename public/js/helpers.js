@@ -363,12 +363,12 @@ function changePassword()
  * @param  {string} hidden_filed
  * @return {void}
  */
-$.fn.emptyModal = function(fields, form, checked_field, hidden_field) {
-
+$.fn.emptyModal = function(fields, form)
+{
     $(this).on("hidden.bs.modal", function() {
 
         // Clear the form values
-        clearForm(this, checked_field, hidden_field)
+        clearForm($(this))
 
         // Clear the server side errors
         clearServerErrors(fields)
@@ -384,20 +384,9 @@ $.fn.emptyModal = function(fields, form, checked_field, hidden_field) {
  * @param  {object} form
  * @return {void}
  */
-function clearForm(form, checked_field, hidden_field)
+function clearForm(modal)
 {
-    $(form)
-        .find("input[type=text], input[type=password], input[type=file], textarea")
-        .val('').end()
-        .find("select")
-        .val(null).trigger('change')
-        .find("input[type=checkbox], input[type=radio]")
-        .prop("checked", "").end()
-
-    $(form)
-        .find(checked_field).prop('checked', true)
-
-    hidden_field ? hidden_field.hide() : ''
+    modal.find('form').trigger('reset');
 }
 
 /**

@@ -48,13 +48,20 @@
             profileId = "{{ $profile->id }}",
             appointmentsUrl = '/appointments/' + profileId,
             profileWorkdays = {{ $profile->workdays->pluck('id') }},
+            profilesAppInt20 = "{{ \App\Profile::appInterval(20)->pluck('id') }}",
             appModal = $("#appModal"),
             appForm = $("#appForm"),
             dateField = $("#appDate"),
             startField = $("#appStart"),
+            genderField = $("#male"),
             dateFormat = "YYYY-MM-DD",
             timeFormat = "HH:mm",
-            profilesAppInt20 = "{{ \App\Profile::appInterval(20) }}"
+            appFormFields = ['profile_id', 'gender', 'f_name', 'l_name', 'birthday', 'phone']
+
+        appModal.emptyModal(appFormFields)
+        // appModal.on('hidden.bs.modal', function () {
+        //     $(this).find('form').trigger('reset');
+        // })
 
         calendar.fullCalendar({
             header: {
@@ -66,8 +73,8 @@
             handleWindowResize: true,
             displayEventTime: false,
             showNonCurrentDates: true, // out of the current view
-            slotLabelFormat: 'H:mm',
-            slotDuration: slotDuration(profileId, profilesAppInt20, 20),
+            slotLabelFormat: 'H:mm', // 16:00
+            slotDuration: slotDuration(profileId, profilesAppInt20, 20), //
             firstDay: 1,
             navLinks: true,
             selectHelper: true,
@@ -96,6 +103,8 @@
                     textColor: 'black',
                 }
             ],
+            //override default "02:00:00" when the event end is not defined
+            defaultTimedEventDuration: slotDuration(profileId, profilesAppInt20, 20),
             dayRender: function (date, cell) {
 
                 var day = moment(date).day()

@@ -22,7 +22,7 @@ class CreateAppointmentsTable extends Migration
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
 
             $table->timestamp('start');
-            $table->timestamp('end')->nullable();
+            // $table->timestamp('end')->nullable();
 
             $table->timestamps();
         });
