@@ -5,14 +5,11 @@ namespace App\Http\Requests;
 use App\Rules\AlphaNumSpace;
 use App\Rules\Workdays;
 use App\Rules\Workhours;
-use App\Traits\ModelFinder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class AppointmentRequest extends FormRequest
 {
-    use ModelFinder;
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -30,17 +27,11 @@ class AppointmentRequest extends FormRequest
      */
     public function rules()
     {
-        $profile = $this->getProfile($this->profile_id);
-
-        $workdays = $profile->workdays->pluck('name');
-
-        $day = setDay($this->app_date);
-
         $rules = [
             'profile_id' => 'required|exists:profiles,id',
             'app_date' => [
                 'required','date_format:Y-m-d','after_or_equal:today',
-                new Workdays($this->profile_id)
+                new Workdays($this->profile)
             ],
             'gender' => [
                 'required',
@@ -58,11 +49,12 @@ class AppointmentRequest extends FormRequest
             'phone' => 'required|digits_between:5,15',
         ];
 
-        if ( $workdays->contains($day)) {
+        if ( $this->profile->isAtWork($this->app_date)) {
             $rules['app_start'] = [
+                'bail',
                 'required',
                 'date_format:H:i',
-                new Workhours($this->profile_id, $this->app_date),
+                new Workhours($this->profile, $this->app_date),
             ];
         }
 

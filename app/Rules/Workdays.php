@@ -3,23 +3,20 @@
 namespace App\Rules;
 
 use App\Profile;
-use App\Traits\ModelFinder;
 use Illuminate\Contracts\Validation\Rule;
 
 class Workdays implements Rule
 {
-    use ModelFinder;
-
-    public $profile_id;
+    public $profile;
 
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($profile_id)
+    public function __construct($profile)
     {
-        $this->profile_id = $profile_id;
+        $this->profile = $profile;
     }
 
     /**
@@ -31,13 +28,7 @@ class Workdays implements Rule
      */
     public function passes($attribute, $value)
     {
-        $profile = $this->getProfile($this->profile_id);
-
-        $workdays = $profile->workdays->pluck('name');
-
-        $day = setDay($value);
-
-        return $workdays->contains($day);
+        return $this->profile->isAtWork($value);
     }
 
     /**

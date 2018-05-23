@@ -98,4 +98,35 @@ class Profile extends Model
 
         return $profiles->load('appointments.patient');
     }
+
+    /**
+     * The doctor is at work.
+     *
+     * @param  string  $date
+     * @return boolean
+     */
+    public function isAtWork($date)
+    {
+        $workdays = $this->workdays->pluck('name');
+
+        $day = setDay($date);
+
+        return $workdays->contains($day);
+    }
+
+    /**
+     * Determine if the time is working hour.
+     *
+     * @param  string $date
+     * @param  string $time
+     * @return string
+     */
+    public function workingDayHour($date, $time)
+    {
+        $work_day_id = setDay($date, 'w');
+
+        $day = $this->workdays()->where('work_day_id', $work_day_id)->first();
+
+        return $day ? $time >= $day->pivot->start && $time < $day->pivot->end : '';
+    }
 }

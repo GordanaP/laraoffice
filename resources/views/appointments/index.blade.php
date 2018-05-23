@@ -18,7 +18,7 @@
     <h4 class="text-uppercase mb-4 mt-1">Doctors</h4>
     @foreach ($profiles as $userProfile)
         <p>
-            <a href="{{ route('appointments.index', $userProfile->id) }}">
+            <a href="{{ route('appointments.index', $userProfile) }}">
                 {{ $userProfile->name }}
             </a>
         </p>
@@ -47,7 +47,7 @@
         var calendar = $('#appointmentsCalendar'),
             profileId = "{{ $profile->id }}",
             profileName = "{{ $profile->name }}",
-            appointmentsUrl = '/appointments/' + profileId,
+            appointmentsUrl = "{{ route('appointments.index', $profile) }}",
             profileWorkdays = {{ $profile->workdays->pluck('id') }},
             profilesAppInt20 = "{{ \App\Profile::appInterval(20)->pluck('id') }}",
             appModal = $("#appModal"),
@@ -137,11 +137,7 @@
         })
 
         // Store appointment
-        $(document).on('click', '#createApp', function(){
-
-            var storeAppUrl = "{{ route('appointments.store') }}"
-            var h = startField.val()
-            console.log(h)
+        $(document).on('click', '#createApp', function() {
 
             var appointment = {
                 profile_id: getProfileId(profileId, profileField),
@@ -155,7 +151,7 @@
             }
 
             $.ajax({
-                url: storeAppUrl,
+                url: appointmentsUrl,
                 type: 'POST',
                 data: appointment,
                 success: function(response)

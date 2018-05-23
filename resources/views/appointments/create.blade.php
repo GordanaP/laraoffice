@@ -22,7 +22,7 @@
 @section('content')
     @include('errors._list')
 
-    <form action="{{ route('appointments.store') }}" method="POST">
+    <form action="{{ route('appointments.store', $profile) }}" method="POST">
         <p class="text-uppercase mb-2">APPOINTMENT DETAILS</p>
 
         @csrf

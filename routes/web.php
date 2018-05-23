@@ -95,8 +95,8 @@ Route::prefix('admin')->namespace('User')->name('admin.')->middleware('auth.admi
 /**
  * Appointment
  */
-Route::name('appointments.store')->post('appointments', 'AppointmentController@store');
 Route::name('appointments.index')->get('appointments/{profile?}', 'AppointmentController@index');
+Route::name('appointments.store')->post('appointments/{profile}', 'AppointmentController@store');
 Route::name('appointments.create')->get('appointments/{profile}/create', 'AppointmentController@create');
 Route::name('appointments.update')->put('appointments/{profile}/{appointment}', 'AppointmentController@update');
 Route::name('appointments.destroy')->delete('appointments/{profile}/{appointment}', 'AppointmentController@destroy');
