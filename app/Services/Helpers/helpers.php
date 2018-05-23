@@ -86,9 +86,9 @@ function setAvatarName($userId, $file)
  * @param string $hour
  * @return string
  */
-function appointmentStart($day, $hour)
+function appointmentStart($day, $hour, $format='Y-m-d')
 {
-    return $day->format('Y-m-d'). ' ' .$hour.':00';
+    return $day->format($format). ' ' .$hour.':00';
 }
 
 /**
@@ -144,31 +144,6 @@ function timeNow($format = 'H')
 }
 
 /**
- * Get the working hours stratified by the day time.
- *
- * @return array
- */
-function workingHours($start, $breakpoint, $end)
-{
-    $workingHours = collect(WorkingHours::all());
-
-    if(morningShift($start, $breakpoint))
-    {
-        $filteredHours = $workingHours->filter(function ($value, $key) use($start, $breakpoint, $end) {
-            return $value >= $start && $value < $breakpoint;
-        });
-    }
-    elseif (afternoonShift($breakpoint, $end))
-    {
-        $filteredHours = $workingHours->filter(function ($value, $key) use($start, $breakpoint, $end) {
-            return $value >= $breakpoint && $value < $end;
-        });
-    }
-
-    return $filteredHours->all();
-}
-
-/**
  * Determine the day of week.
  *
  * @param  \Carbon\Carbon $day
@@ -190,4 +165,38 @@ function weekdayId($day)
 function getEventDate($date, $time, $format='Y-m-d H:i')
 {
     return Carbon::createFromFormat($format, $date.' '.$time)->toDateTimeString();
+}
+
+/**
+ * Get a past year
+ *
+ * @param  string $day
+ * @param  int $years
+ * @param  string $format
+ * @return string
+ */
+function pastYears($day, $years, $format='Y-m-d')
+{
+    return $day->subYears($years)->format($format);
+}
+
+/**
+ * Set a date
+ *
+ * @param string $day
+ * @param string $format
+ */
+function setDate($day, $format='Y-m-d')
+{
+    return $day->format($format);
+}
+
+/**
+ * Set a weekday.
+ *
+ * @param string $format
+ */
+function setDay($date, $format='l')
+{
+    return date($format, strtotime($date));
 }

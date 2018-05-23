@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Patient;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -49,15 +50,33 @@ class Appointment extends Model
      * @param  App\Patient $patient
      * @return App\Appointment
      */
-    public static function createNew($data, $patient)
+    public static function createNew($data)
     {
+        $patient = Patient::createNew($data);
+
         $appointment = new static;
 
-        $appointment->start = getEventDate($data['appDate'], $data['appStart']);
+        $appointment->start = getEventDate($data['app_date'], $data['app_start']);
         $appointment->profile()->associate($data['profile_id']);
 
         $patient->appointments()->save($appointment);
 
         return $appointment;
+    }
+
+    public static function profilesOnDuty($start, $breakpoint, $end)
+    {
+        $today = today()->dayOfWeekIso;
+
+        if(morningShift($start, $breakpoint))
+        {
+            $profiles = static::find($today)->profiles()->wherePivot('start', '<', $breakpoint)->get();
+        }
+        elseif (afternoonShift($breakpoint, $end))
+        {
+            $profiles = static::find($today)->profiles()->wherePivot('start', '>=', $breakpoint)->get();
+        }
+
+        return $profiles->load('appointments.patient');
     }
 }

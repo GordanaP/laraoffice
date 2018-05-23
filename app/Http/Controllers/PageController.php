@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Profile;
 use App\Traits\ModelFinder;
 use App\WorkDay;
 use Illuminate\Http\Request;
@@ -39,7 +40,8 @@ class PageController extends Controller
      */
     public function home()
     {
-        $profiles = WorkDay::profilesOnDuty(5, 15, 24);
+        // $profiles = WorkDay::profilesOnDuty(5, 15, 24);
+        $profiles = Profile::profilesOnDuty(5, 15, 24);
 
         return view('home', compact('profiles'));
     }

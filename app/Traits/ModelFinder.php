@@ -33,8 +33,21 @@ trait ModelFinder
      *
      * @return array
      */
-    public function getProfiles()
+    // public function getProfiles()
+    // {
+    //     return Profile::all()->load('appointments.patient');
+    // }
+
+
+    /**
+     * Get a profile.
+     *
+     * @param  mixed $value
+     * @param  string $attribute
+     * @return \App\Profile
+     */
+    public function getProfile($value, $attribute='id')
     {
-        return Profile::all()->load('appointments.patient');
+        return Profile::where($attribute, $value)->first();
     }
 }

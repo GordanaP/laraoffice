@@ -78,4 +78,24 @@ class Profile extends Model
             $q->where('appInterval', '=', $mins);
         })->get();
     }
+
+    public static function profilesOnDuty($start, $breakpoint, $end)
+    {
+        $today = today()->dayOfWeekIso;
+
+        if(morningShift($start, $breakpoint))
+        {
+            $profiles = static::whereHas('workdays', function ($q) use($today, $breakpoint) {
+                $q->where('start', '<', $breakpoint);
+            })->get();
+        }
+        elseif (afternoonShift($breakpoint, $end))
+        {
+            $profiles = static::whereHas('workdays', function ($q) use($today, $breakpoint) {
+                $q->where('start', '>=', $breakpoint);
+            })->get();
+        }
+
+        return $profiles->load('appointments.patient');
+    }
 }

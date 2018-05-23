@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Appointment;
-use App\Patient;
+use App\Http\Requests\AppointmentRequest;
 use App\Profile;
+use App\Traits\ModelFinder;
 use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
 {
+    use ModelFinder;
     /**
      * Display a listing of the resource.
      *
@@ -41,9 +43,11 @@ class AppointmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Profile $profile)
     {
-        //
+        $profiles = Profile::with('user')->orderBy('name', 'asc')->get();
+
+        return view('appointments.create', compact('profiles', 'profile'));
     }
 
     /**
@@ -52,13 +56,18 @@ class AppointmentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AppointmentRequest $request)
     {
-        $patient = Patient::createNew($request);
+        Appointment::createNew($request);
 
-        Appointment::createNew($request, $patient);
-
-        return message('A new appointment has been created');
+        if(request()->ajax())
+        {
+            return message('A new appointment has been created');
+        }
+        else
+        {
+            return back();
+        }
     }
 
     /**
@@ -90,7 +99,7 @@ class AppointmentController extends Controller
      * @param  \App\Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Appointment $appointment)
+    public function update(AppointmentRequest $request, Appointment $appointment)
     {
         //
     }

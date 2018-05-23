@@ -48,24 +48,24 @@
             profileId = "{{ $profile->id }}",
             profileName = "{{ $profile->name }}",
             appointmentsUrl = '/appointments/' + profileId,
-            profileWorkdays = "{{ $profile->workdays->pluck('id') }}",
+            profileWorkdays = {{ $profile->workdays->pluck('id') }},
             profilesAppInt20 = "{{ \App\Profile::appInterval(20)->pluck('id') }}",
             appModal = $("#appModal"),
             appForm = $("#appForm"),
             profileField = $("#profile_id"),
-            dateField = $("#appDate"),
-            startField = $("#appStart"),
-            genderField = $("#male"),
-            fNameField = $("#firstName"),
-            lNameField = $("#lastName"),
-            birthday = $("#birthday"),
-            phone = $("#phone"),
+            dateField = $("#app_date"),
+            startField = $("#app_start"),
+            genderRadio = 'gender',
+            fNameField = $("#f_name"),
+            lNameField = $("#l_name"),
+            birthdayField = $("#birthday"),
+            phoneField = $("#phone"),
             dateFormat = "YYYY-MM-DD",
             timeFormat = "HH:mm",
-            appFormFields = ['profile_id', 'gender', 'f_name', 'l_name', 'birthday', 'phone']
+            appFormFields = ['profile_id','app_date', 'app_start', 'gender', 'f_name', 'l_name', 'birthday', 'phone']
 
         appModal.emptyModal(appFormFields)
-        appModal.setAutofocus('profile_id')
+        appModal.setAutofocus('profileId')
 
         calendar.fullCalendar({
             header: {
@@ -140,16 +140,18 @@
         $(document).on('click', '#createApp', function(){
 
             var storeAppUrl = "{{ route('appointments.store') }}"
+            var h = startField.val()
+            console.log(h)
 
             var appointment = {
+                profile_id: getProfileId(profileId, profileField),
+                app_date: dateField.val(),
+                app_start: startField.val(),
+                gender: getCheckedValue(appForm, genderRadio),
                 f_name: fNameField.val(),
                 l_name: lNameField.val(),
-                birthday: birthday.val(),
-                gender: getCheckedValue(appForm, 'gender'),
-                phone: phone.val(),
-                profile_id: getProfileId(profileId, profileField),
-                appDate: dateField.val(),
-                appStart: startField.val(),
+                birthday: birthdayField.val(),
+                phone: phoneField.val(),
             }
 
             $.ajax({
@@ -162,9 +164,12 @@
 
                     calendar.fullCalendar('renderEvent', appointment)
                     calendar.fullCalendar('refetchEvents');
+                },
+                error: function(response)
+                {
+                    errorResponse(response.responseJSON.errors, appModal)
                 }
             })
         })
-
     </script>
 @endsection
