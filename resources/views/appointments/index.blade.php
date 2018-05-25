@@ -74,9 +74,11 @@
                 center: 'title',
             },
             defaultView: profileId ? 'agendaWeek' : 'month',
+            fixedWeekCount:false,
             handleWindowResize: true,
             displayEventTime: false,
-            showNonCurrentDates: true, // out of the current view
+            showNonCurrentDates: true,  // out of the current view
+            allDaySlot:true,
             slotLabelFormat: 'H:mm', // 16:00
             slotDuration: slotDuration(profileId, profilesAppInt20, 20), //
             firstDay: 1,
@@ -100,13 +102,17 @@
             maxTime: "20:00",
             eventLimit: true,
             timezone: 'Europe/Belgrade',
-            eventSources: [
-                {
-                    url : appointmentsUrl,
-                    color: '#ffae00',
-                    textColor: 'black',
-                }
-            ],
+            events:  {
+                url: appointmentsUrl,
+                textColor: 'black',
+                timeFormat: 'H:mm'
+            },
+            //transform event attributes into event object attributes
+            eventDataTransform: function(event) {
+                event.title = event.patient.f_name + ' ' + event.patient.l_name
+                event.color = event.profile.color
+                return event;
+            },
             //override default "02:00:00" when the event end is not defined
             defaultTimedEventDuration: slotDuration(profileId, profilesAppInt20, 20),
             dayRender: function (date, cell) {
@@ -125,6 +131,7 @@
                 $(".modal-title i").addClass('fa-calendar')
                 $(".modal-title span").text('New appointment')
                 $(".app-button").addClass('bg-indigo-dark text-white').text('Create appointment').attr('id', 'createApp')
+                $('#app-time-label').text('09:00 - 15:00')
 
                 // Appointment form
                 var appDate = eventDate(start, dateFormat)
@@ -135,6 +142,7 @@
                 profileField.val(profileName);
             }
         })
+
 
         // Store appointment
         $(document).on('click', '#createApp', function() {

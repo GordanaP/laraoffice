@@ -22,6 +22,7 @@ class CreateProfilesTable extends Migration
             $table->string('name')->nullable();
             $table->string('about')->nullable();
             $table->string('location')->nullable();
+            $table->string('color');
             $table->timestamps();
         });
     }

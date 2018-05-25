@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\AfterNow;
 use App\Rules\AlphaNumSpace;
 use App\Rules\Workdays;
 use App\Rules\Workhours;
@@ -49,12 +50,13 @@ class AppointmentRequest extends FormRequest
             'phone' => 'required|digits_between:5,15',
         ];
 
-        if ( $this->profile->isAtWork($this->app_date)) {
+        if ( $this->profile->isAtWork($this->app_date )) {
             $rules['app_start'] = [
                 'bail',
                 'required',
                 'date_format:H:i',
                 new Workhours($this->profile, $this->app_date),
+                new AfterNow($this->app_date)
             ];
         }
 

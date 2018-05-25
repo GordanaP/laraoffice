@@ -9,5 +9,6 @@ $factory->define(App\Profile::class, function (Faker $faker) {
         'name' => $faker->name,
         'about' => $faker->sentence,
         'location' => $faker->city,
+        'color' => $faker->hexcolor,
     ];
 });

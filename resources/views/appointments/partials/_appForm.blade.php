@@ -29,7 +29,7 @@
     </div>
     <div class="col-md-6">
         <div class="form-group">
-            <label for="app_start">Time</label>
+            <label for="app_start">Time: <span id="app-time-label"></span></label>
             <input type="text" name="app_start" id="app_start" class="form-control rounded-none app_start" placeholder="hh:mm" />
 
             <span class="invalid-feedback app_start"></span>
@@ -41,7 +41,7 @@
 
 <div class="form-group flex flex-column mb-1">
     <label for="gender" class="mr-3">Gender:</label>
-    <div class="flex">
+    <div class="flex" id="gender">
         <div class="form-check mr-3">
             <input class="form-check-input gender" type="radio" name="gender" id="male" value="M" />
             <label class="form-check-label" for="male">Male</label>

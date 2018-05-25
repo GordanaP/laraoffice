@@ -22,11 +22,11 @@ class AppointmentController extends Controller
         {
             if (request()->is('appointments/'.$profile->id))
             {
-                return $profile->appointments;
+                return $profile->appointments->load('patient', 'profile');
             }
             else
             {
-                return Appointment::all();
+                return Appointment::all()->load('patient', 'profile');
             }
         }
 

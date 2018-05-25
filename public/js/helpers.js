@@ -239,6 +239,7 @@ function clearErrorOnNewInput()
         clearError(id)
     });
 
+
     $("input[type=checkbox], input[type=radio]").click(function() {
 
         var id = $(this).parents(':eq(1)').attr('id');
@@ -250,6 +251,8 @@ function clearErrorOnNewInput()
         clearError(name)
         clearError(id)
     })
+
+
 }
 
 /**

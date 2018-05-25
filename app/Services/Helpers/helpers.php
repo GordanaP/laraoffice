@@ -200,3 +200,28 @@ function setDay($date, $format='l')
 {
     return date($format, strtotime($date));
 }
+
+/**
+ * Get the working hours stratified by the day time.
+ *
+ * @return array
+ */
+function workingHours($start, $breakpoint, $end)
+{
+    $workingHours = collect(WorkingHours::all());
+
+    if(morningShift($start, $breakpoint))
+    {
+        $filteredHours = $workingHours->filter(function ($value, $key) use($start, $breakpoint, $end) {
+            return $value >= $start && $value < $breakpoint;
+        });
+    }
+    elseif (afternoonShift($breakpoint, $end))
+    {
+        $filteredHours = $workingHours->filter(function ($value, $key) use($start, $breakpoint, $end) {
+            return $value >= $breakpoint && $value < $end;
+        });
+    }
+
+    return $filteredHours->all();
+}
