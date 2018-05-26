@@ -16,6 +16,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected $namespace = 'App\Http\Controllers';
 
+    protected $namespace_user = 'App\Http\Controllers\User';
+    protected $namespace_auth = 'App\Http\Controllers\Auth';
+
     /**
      * Define your route model bindings, pattern filters, etc.
      *
@@ -36,8 +39,12 @@ class RouteServiceProvider extends ServiceProvider
     public function map()
     {
         $this->mapApiRoutes();
-
         $this->mapWebRoutes();
+
+        $this->mapSettingsRoutes();
+        $this->mapAdminRoutes();
+        $this->mapAppointmentsRoutes();
+        $this->mapAccountsRoutes();
 
         //
     }
@@ -70,4 +77,59 @@ class RouteServiceProvider extends ServiceProvider
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
     }
+
+    /**
+     * Define the "settings" routes for the application.
+     *
+     * @return void
+     */
+    protected function mapSettingsRoutes()
+    {
+        Route::prefix('settings')
+             ->middleware('web')
+             ->namespace($this->namespace_user)
+             ->group(base_path('routes/custom/settings.php'));
+    }
+
+    /**
+     * Define the "admin" routes for the application.
+     *
+     * @return void
+     */
+    protected function mapAdminRoutes()
+    {
+        Route::prefix('admin')
+             ->middleware('web', 'auth.admin')
+             ->namespace($this->namespace_user)
+             ->group(base_path('routes/custom/admin.php'));
+    }
+
+
+    /**
+     * Define the "appointments" routes for the application.
+     *
+     * @return void
+     */
+    protected function mapAppointmentsRoutes()
+    {
+        Route::prefix('appointments')
+             ->middleware('web')
+             ->namespace($this->namespace)
+             ->group(base_path('routes/custom/appointments.php'));
+    }
+
+
+    /**
+     * Define the "accounts" routes for the application.
+     *
+     * @return void
+     */
+    protected function mapAccountsRoutes()
+    {
+        Route::prefix('accounts')
+             ->middleware('web')
+             ->namespace($this->namespace_auth)
+             ->group(base_path('routes/custom/accounts.php'));
+    }
+
 }

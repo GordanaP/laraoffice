@@ -131,7 +131,6 @@
                 $(".modal-title i").addClass('fa-calendar')
                 $(".modal-title span").text('New appointment')
                 $(".app-button").addClass('bg-indigo-dark text-white').text('Create appointment').attr('id', 'createApp')
-                $('#app-time-label').text('09:00 - 15:00')
 
                 // Appointment form
                 var appDate = eventDate(start, dateFormat)
