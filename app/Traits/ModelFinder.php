@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Patient;
 use App\Profile;
 use App\Role;
 use App\User;
@@ -33,11 +34,10 @@ trait ModelFinder
      *
      * @return array
      */
-    // public function getProfiles()
-    // {
-    //     return Profile::all()->load('appointments.patient');
-    // }
-
+    public function getProfiles($attr='name', $order='asc')
+    {
+        return Profile::with('user')->orderBy($attr, $order)->get();
+    }
 
     /**
      * Get a profile.
@@ -49,5 +49,11 @@ trait ModelFinder
     public function getProfile($value, $attribute='id')
     {
         return Profile::where($attribute, $value)->first();
+    }
+
+
+    public function getPatient($value, $attribute='id')
+    {
+        return Patient::where($attribute, $value)->first();
     }
 }

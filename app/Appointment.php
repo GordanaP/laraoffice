@@ -3,11 +3,14 @@
 namespace App;
 
 use App\Patient;
+use App\Traits\ModelFinder;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Appointment extends Model
 {
+    use ModelFinder;
+
     /**
      * The attributes that should be mutated to dates.
      *
@@ -43,25 +46,18 @@ class Appointment extends Model
         return $this->belongsTo(Patient::class);
     }
 
-    /**
-     * Create a new appointment.
-     *
-     * @param  array $data    [description]
-     * @param  App\Patient $patient
-     * @return App\Appointment
-     */
-    public static function createNew($data)
+    public static function createOrUpdate($data, $appointment=null)
     {
-        $patient = Patient::createNew($data);
+        $patient = $appointment ? \App\Patient::where('id', $appointment->patient_id)->first() : '';
 
-        $appointment = new static;
+        $patient = Patient::createOrUpdate($data, $patient);
+
+        $appointment = $appointment ?: new static;
 
         $appointment->start = getEventDate($data['app_date'], $data['app_start']);
         $appointment->profile()->associate($data['profile_id']);
 
         $patient->appointments()->save($appointment);
-
-        return $appointment;
     }
 
     public static function profilesOnDuty($start, $breakpoint, $end)

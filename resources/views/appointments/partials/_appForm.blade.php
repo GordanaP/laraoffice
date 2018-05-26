@@ -2,18 +2,7 @@
 
 <div class="form-group">
     <label for="profile_id">Doctor</label>
-    @if (Request::is('appointments/*'))
-        <input type="text" name="profile_id" id="profile_id" class="form-control rounded-none profile_id" />
-    @else
-        <select name="profile_id" id="profile_id" class="form-control rounded-none profile_id">
-            <option>Select a doctor</option>
-            @foreach ($profiles as $profile)
-                <option value="{{ $profile->id }}">
-                    {{ $profile->name }}
-                </option>
-            @endforeach
-        </select>
-    @endif
+    <input type="text" name="profile_id" id="profile_id" class="form-control rounded-none profile_id" />
 
     <span class="invalid-feedback profile_id"></span>
 </div>

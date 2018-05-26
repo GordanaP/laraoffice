@@ -18,7 +18,7 @@ class CreatePatientsTable extends Migration
             $table->enum('gender', ['M', 'F']);
             $table->string('f_name');
             $table->string('l_name');
-            $table->timestamp('birthday');
+            $table->date('birthday');
             $table->string('phone');
             $table->timestamps();
         });

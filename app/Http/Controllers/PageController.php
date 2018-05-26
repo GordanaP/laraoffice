@@ -40,10 +40,11 @@ class PageController extends Controller
      */
     public function home()
     {
-        // $profiles = WorkDay::profilesOnDuty(5, 15, 24);
-        $profiles = Profile::profilesOnDuty(5, 15, 24);
+        $profiles = $this->getProfiles();
 
-        return view('home', compact('profiles'));
+        $profilesOnDuty = Profile::profilesOnDuty(5, 15, 24);
+
+        return view('home', compact('profiles', 'profilesOnDuty'));
     }
 
     /**

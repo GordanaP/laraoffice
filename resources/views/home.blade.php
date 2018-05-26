@@ -1,17 +1,26 @@
-@extends('layouts.master')
+@extends('layouts.app')
 
 @section('title', "| Today's Appointments")
 
-@section('content')
+@section('side')
+    <h4 class="text-uppercase mb-4 mt-1">Doctors</h4>
+    @foreach ($profiles as $userProfile)
+        <p>
+            <a href="{{ route('appointments.index', $userProfile) }}">
+                {{ $userProfile->name }}
+            </a>
+        </p>
+    @endforeach
+@endsection
 
-    <a href="{{ route('appointments.index') }}" class="btn btn-info mb-3">New appointment</a>
+@section('content')
 
     <div class="card card-default bg-yellow">
         <table class="table table-bordered bg-white mb-0 daily-calendar">
             <p class="p-3 font-bold text-lg">{{ dailyTime() }}</p>
             <thead class="bg-grey-lighter">
                 <th>Time</th>
-                @foreach ($profiles as $profile)
+                @foreach ($profilesOnDuty as $profile)
                     <th>
                         <a href="{{ route('appointments.index', $profile) }}" class="uppercase">
                             {{ $profile->name }}
@@ -25,7 +34,7 @@
                         <td class="bg-grey-lightest">
                             {{ $hour }}
                         </td>
-                        @foreach ($profiles as $profile)
+                        @foreach ($profilesOnDuty as $profile)
                             @forelse ($profile->getAppointments(today(config('app.timezone')), $hour) as $appointment)
                                 <td>
                                     {{ fullName($appointment->patient->f_name, $appointment->patient->l_name) }}

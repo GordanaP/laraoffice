@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Appointment;
 use App\Http\Requests\AppointmentRequest;
+use App\Patient;
 use App\Profile;
 use App\Traits\ModelFinder;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 class AppointmentController extends Controller
 {
     use ModelFinder;
+
     /**
      * Display a listing of the resource.
      *
@@ -20,17 +22,10 @@ class AppointmentController extends Controller
     {
         if (request()->ajax())
         {
-            if (request()->is('appointments/'.$profile->id))
-            {
-                return $profile->appointments->load('patient', 'profile');
-            }
-            else
-            {
-                return Appointment::all()->load('patient', 'profile');
-            }
+            return $profile->appointments->load('patient', 'profile');
         }
 
-        $profiles = Profile::with('user')->orderBy('name', 'asc')->get();
+        $profiles = $this->getProfiles();
 
         return view('appointments.index')->with([
             'profile' => $profile,
@@ -45,7 +40,7 @@ class AppointmentController extends Controller
      */
     public function create(Profile $profile)
     {
-        $profiles = Profile::with('user')->orderBy('name', 'asc')->get();
+        $profiles = $this->getProfiles();
 
         return view('appointments.create', compact('profiles', 'profile'));
     }
@@ -58,7 +53,7 @@ class AppointmentController extends Controller
      */
     public function store(AppointmentRequest $request, Profile $profile)
     {
-        Appointment::createNew($request);
+        Appointment::createOrUpdate($request);
 
         if(request()->ajax())
         {
@@ -87,9 +82,9 @@ class AppointmentController extends Controller
      * @param  \App\Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
-    public function edit(Appointment $appointment)
+    public function edit(Profile $profile, Appointment $appointment)
     {
-        //
+        return view('appointments.edit', compact('profile', 'appointment'));
     }
 
     /**
@@ -99,9 +94,11 @@ class AppointmentController extends Controller
      * @param  \App\Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
-    public function update(AppointmentRequest $request, Appointment $appointment)
+    public function update(Profile $profile, Appointment $appointment, AppointmentRequest $request)
     {
-        //
+        Appointment::createOrUpdate($request, $appointment);
+
+        return back();
     }
 
     /**

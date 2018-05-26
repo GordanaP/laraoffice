@@ -25,8 +25,17 @@ function eventDate(momentDate, dateFormat)
     return momentDate.format(dateFormat)
 }
 
+
+function isNotPast(momentDate, dateFormat)
+{
+    var selectedDate = momentDate.format(dateFormat);
+    var today = moment().format(dateFormat);
+
+    return selectedDate >= today;
+}
+
 /**
- * Get the calendar time interval.
+ * Get the calendar time interval for the specified profile.
  *
  * @param  {int} profileId
  * @param  {array} profilesInt
@@ -35,16 +44,16 @@ function eventDate(momentDate, dateFormat)
  */
 function slotDuration(profileId, profilesInt, intervalMins)
 {
-    return $.inArray(profileId, profilesInt) !== -1 ? appInterval(intervalMins) : appInterval()
+    return $.inArray(profileId, profilesInt) !== -1 ? slotDurationFormatted(intervalMins) : slotDurationFormatted()
 }
 
 /**
- * Get the time interval.
+ * Get the fullcalendar time interval formatted.
  *
  * @param  {int} intervalMins
  * @return {string}
  */
-function appInterval(intervalMins=30)
+function slotDurationFormatted(intervalMins=30)
 {
     return '00:'+intervalMins+':00'
 }

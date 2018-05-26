@@ -25,13 +25,13 @@ class Patient extends Model
      * @param  array $data
      * @return App\Patient
      */
-    protected static function createNew($data)
+    public static function createOrUpdate($data, $patient=null)
     {
-        $patient = new static;
+        $patient = $patient ?: new static;
 
         $patient->f_name = $data['f_name'];
         $patient->l_name =$data['l_name'];
-        $patient->birthday = Carbon::createFromFormat('Y-m-d H', $data['birthday'] .' 24');
+        $patient->birthday = Carbon::createFromFormat('Y-m-d', $data['birthday']);
         $patient->gender = $data['gender'];
         $patient->phone = $data['phone'];
 

@@ -7,7 +7,7 @@ $factory->define(App\Patient::class, function (Faker $faker) {
         'f_name' => $faker->firstName,
         'l_name' => $faker->lastName,
         'gender' =>  $faker->randomElement(['M' ,'F']),
-        'birthday' => $faker->dateTimeBetween($startDate = '-40 years', $endDate = '-20 years'),
+        'birthday' => setDate(today()->subYears(30)),
         'phone' => $faker->e164PhoneNumber
     ];
 });

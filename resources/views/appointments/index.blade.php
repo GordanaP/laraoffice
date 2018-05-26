@@ -123,10 +123,10 @@
                     cell.css("background-color", "#E3FCEC");
                 }
             },
-            select: function(start, end, jsEvent, view){
+            select: function(start, end, jsEvent, view) {
 
                 // Appointment modal
-                appModal.modal('show')
+                isNotPast(start, dateFormat) ? appModal.modal('show') : alert('The date must not be in the past.')
 
                 $(".modal-title i").addClass('fa-calendar')
                 $(".modal-title span").text('New appointment')

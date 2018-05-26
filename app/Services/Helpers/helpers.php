@@ -29,6 +29,11 @@ function set_active_link($value, $segment=1)
     return request()->segment($segment) == $value ? 'active' : '';
 }
 
+function getCheckedValue($attribute, $value)
+{
+    return $attribute == $value ? 'checked' : '';
+}
+
 /**
  * Set the class color.
  *
