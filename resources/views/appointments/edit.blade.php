@@ -17,11 +17,11 @@
         <p class="text-uppercase mb-2">APPOINTMENT DETAILS</p>
 
         @csrf
-        @method('PUT')
+        @method('PATCH')
 
         <div class="form-group">
             <label for="profile_id">Doctor</label>
-                <input type="text" name="profile_id" id="profile_id" class="form-control rounded-none profile_id" value="{{ $profile->id }}" />
+                <input type="text" name="profile_id" id="profile_id" class="form-control rounded-none profile_id" value="{{ $profile->id }}" disabled="" />
             <span class="invalid-feedback profile_id"></span>
         </div>
 
@@ -50,11 +50,11 @@
             <label for="gender" class="mr-3">Gender:</label>
             <div class="flex">
                 <div class="form-check mr-3">
-                    <input class="form-check-input gender" type="radio" name="gender" id="male" value="M" {{ getCheckedValue($appointment->patient->gender, 'M') }} />
+                    <input class="form-check-input gender" type="radio" name="gender" id="male" value="M" {{ getCheckedValue($appointment->patient->gender, 'M') }} disabled/>
                     <label class="form-check-label" for="male">Male</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input gender" type="radio" name="gender" id="female" value="F" {{ getCheckedValue($appointment->patient->gender, 'F') }} />
+                    <input class="form-check-input gender" type="radio" name="gender" id="female" value="F" {{ getCheckedValue($appointment->patient->gender, 'F') }} disabled/>
                     <label class="form-check-label" for="female">Female</label>
                 </div>
             </div>
@@ -66,7 +66,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="f_name">First name</label>
-                    <input type="text" name="f_name" id="f_name" class="form-control rounded-none f_name" placeholder="Enter first name" value="{{ $appointment->patient->f_name }}" />
+                    <input type="text" name="f_name" id="f_name" class="form-control rounded-none f_name" placeholder="Enter first name" value="{{ $appointment->patient->f_name }}" disabled/>
 
                     <span class="invalid-feedback f_name"></span>
                 </div>
@@ -74,7 +74,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="l_name">Last name</label>
-                    <input type="text" name="l_name" id="l_name" class="form-control rounded-none l_name" placeholder="Enter last name" value="{{ $appointment->patient->l_name }}" />
+                    <input type="text" name="l_name" id="l_name" class="form-control rounded-none l_name" placeholder="Enter last name" value="{{ $appointment->patient->l_name }}" disabled/>
 
                     <span class="invalid-feedback l_name"></span>
                 </div>
@@ -85,7 +85,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="birthday">Birthday</label>
-                    <input type="text" name="birthday" id="birthday" class="form-control rounded-none birthday" placeholder="yyyy-mm-dd" value="{{ setDate($appointment->patient->birthday) }}" />
+                    <input type="text" name="birthday" id="birthday" class="form-control rounded-none birthday" placeholder="yyyy-mm-dd" value="{{ setDate($appointment->patient->birthday) }}" disabled/>
 
                     <span class="invalid-feedback birthday"></span>
                 </div>
@@ -93,7 +93,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="phone">Phone number</label>
-                    <input type="text" name="phone" id="phone" class="form-control rounded-none phone" placeholder="123456" value="{{ $appointment->patient->phone }}" />
+                    <input type="text" name="phone" id="phone" class="form-control rounded-none phone" placeholder="123456" value="{{ $appointment->patient->phone }}" disabled/>
 
                     <span class="invalid-feedback name phone"></span>
                 </div>

@@ -51,9 +51,16 @@ trait ModelFinder
         return Profile::where($attribute, $value)->first();
     }
 
-
+    /**
+     * Get a patient.
+     *
+     * @param  mixed $value
+     * @param  string $attribute
+     * @return \App\Patient
+     */
     public function getPatient($value, $attribute='id')
     {
         return Patient::where($attribute, $value)->first();
     }
+
 }

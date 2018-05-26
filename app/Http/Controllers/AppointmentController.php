@@ -53,7 +53,7 @@ class AppointmentController extends Controller
      */
     public function store(AppointmentRequest $request, Profile $profile)
     {
-        Appointment::createOrUpdate($request);
+        Appointment::createNew($request);
 
         if(request()->ajax())
         {
@@ -96,9 +96,16 @@ class AppointmentController extends Controller
      */
     public function update(Profile $profile, Appointment $appointment, AppointmentRequest $request)
     {
-        Appointment::createOrUpdate($request, $appointment);
+        $appointment->saveChanges($request);
 
-        return back();
+        if(request()->ajax())
+        {
+            return message('The appointment has been updated');
+        }
+        else
+        {
+            return back();
+        }
     }
 
     /**

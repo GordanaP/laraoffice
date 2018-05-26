@@ -16,7 +16,7 @@ class Appointment extends Model
      *
      * @var array
      */
-    protected $dates = ['start', 'end'];
+    protected $dates = ['start'];
 
     /**
      * Get the profile that has the appointment.
@@ -46,18 +46,23 @@ class Appointment extends Model
         return $this->belongsTo(Patient::class);
     }
 
-    public static function createOrUpdate($data, $appointment=null)
+    public static function createNew($data)
     {
-        $patient = $appointment ? \App\Patient::where('id', $appointment->patient_id)->first() : '';
+        $patient = Patient::createOrUpdate($data);
 
-        $patient = Patient::createOrUpdate($data, $patient);
-
-        $appointment = $appointment ?: new static;
+        $appointment = new static;
 
         $appointment->start = getEventDate($data['app_date'], $data['app_start']);
         $appointment->profile()->associate($data['profile_id']);
 
         $patient->appointments()->save($appointment);
+    }
+
+    public function saveChanges($data)
+    {
+        $this->start = getEventDate($data['app_date'], $data['app_start']);
+
+        $this->save();
     }
 
     public static function profilesOnDuty($start, $breakpoint, $end)
