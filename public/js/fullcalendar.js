@@ -57,3 +57,8 @@ function slotDurationFormatted(intervalMins=30)
 {
     return '00:'+intervalMins+':00'
 }
+
+function timeFormatted(time)
+{
+    return time+':00'
+}

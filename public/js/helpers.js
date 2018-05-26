@@ -251,8 +251,6 @@ function clearErrorOnNewInput()
         clearError(name)
         clearError(id)
     })
-
-
 }
 
 /**

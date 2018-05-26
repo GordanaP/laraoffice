@@ -55,6 +55,7 @@
             profileField = $("#profile_id"),
             dateField = $("#app_date"),
             startField = $("#app_start"),
+            genderField = $("input[name='gender']"),
             genderRadio = 'gender',
             fNameField = $("#f_name"),
             lNameField = $("#l_name"),
@@ -130,21 +131,48 @@
 
                 $(".modal-title i").addClass('fa-calendar')
                 $(".modal-title span").text('New appointment')
-                $(".app-button").addClass('bg-indigo-dark text-white').text('Create appointment').attr('id', 'createApp')
+                $(".app-button").addClass('bg-indigo-dark text-white').text('Create appointment').attr('id', 'storeApp')
 
                 // Appointment form
                 var appDate = eventDate(start, dateFormat)
                 var appStart = eventStart(view, start, timeFormat)
 
-                dateField.val(appDate);
-                startField.val(appStart);
-                profileField.val(profileName);
+                profileField.val(profileName).attr('disabled', 'disabled')
+                dateField.val(appDate)
+                startField.val(appStart)
+                genderField.removeAttr('disabled')
+                fNameField.removeAttr('disabled')
+                lNameField.removeAttr('disabled')
+                birthdayField.removeAttr('disabled')
+                phoneField.removeAttr('disabled')
+            },
+            eventClick: function(event, jsEvent, view)
+            {
+                appModal.modal('show')
+
+                $(".modal-title i").addClass('fa-calendar')
+                $(".modal-title span").text('Edit appointment')
+                $(".app-button").addClass('bg-indigo-dark text-white').text('Save changes').attr('id', 'updateApp').val(event.id)
+
+                var patient = event.patient
+                var appDate = eventDate(event.start, dateFormat)
+                var appStart = eventStart(view, event.start, timeFormat)
+                var birthday = eventDate(moment(patient.birthday), dateFormat)
+
+                profileField.val(profileName).attr('disabled', 'disabled')
+                dateField.val(appDate)
+                startField.val(appStart)
+                $("input[name="+genderRadio+"][value="+patient.gender+"]").prop('checked', true).attr('disabled', 'disabled')
+                fNameField.val(patient.f_name).attr('disabled', 'disabled')
+                lNameField.val(patient.l_name).attr('disabled', 'disabled')
+                birthdayField.val(birthday).attr('disabled', 'disabled')
+                phoneField.val(patient.phone).attr('disabled', 'disabled')
             }
         })
 
 
         // Store appointment
-        $(document).on('click', '#createApp', function() {
+        $(document).on('click', '#storeApp', function() {
 
             var appointment = {
                 profile_id: getProfileId(profileId, profileField),
@@ -174,5 +202,43 @@
                 }
             })
         })
+
+        // Update appointment
+        $(document).on('click', '#updateApp', function() {
+
+            var appId = $(this).val()
+            var updateAppUrl = appointmentsUrl + '/' + appId
+
+            // Get the app object
+            var appointment = {
+                app_date: dateField.val(),
+                app_start: startField.val(),
+            }
+
+            // Get the FC event object
+            var appEvent = calendar.fullCalendar('clientEvents', appId); // array
+
+            var appTime = appointment.app_date + ' ' + timeFormatted(appointment.app_start)
+
+            // Event title & color are left unchanged
+            appEvent[0].start = appTime
+
+            $.ajax({
+                url: updateAppUrl,
+                type: 'PATCH',
+                data: appointment,
+                success: function(response)
+                {
+                    calendar.fullCalendar('updateEvent', appEvent[0]);
+
+                    successResponse(appModal, response.message)
+                },
+                error: function(response)
+                {
+                    errorResponse(response.responseJSON.errors, appModal)
+                }
+            })
+        })
+
     </script>
 @endsection
