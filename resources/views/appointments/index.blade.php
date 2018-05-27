@@ -30,6 +30,7 @@
     <div id="appointmentsCalendar"></div>
 
     @include('appointments.partials._appModal')
+
 @endsection
 
 @section('scripts')
@@ -52,6 +53,8 @@
             profilesAppInt20 = "{{ \App\Profile::appInterval(20)->pluck('id') }}",
             appModal = $("#appModal"),
             appForm = $("#appForm"),
+            modalTitleIcon = $(".modal-title i"),
+            modalTitleSpan = $(".modal-title span"),
             profileField = $("#profile_id"),
             dateField = $("#app_date"),
             startField = $("#app_start"),
@@ -61,9 +64,12 @@
             lNameField = $("#l_name"),
             birthdayField = $("#birthday"),
             phoneField = $("#phone"),
+            appButton = $(".app-button"),
+            deleteButton = $("#deleteApp"),
             dateFormat = "YYYY-MM-DD",
             timeFormat = "HH:mm",
             appFormFields = ['profile_id','app_date', 'app_start', 'gender', 'f_name', 'l_name', 'birthday', 'phone']
+            disabledFields = [ genderField, fNameField, lNameField, birthdayField, phoneField ]
 
         appModal.emptyModal(appFormFields)
         appModal.setAutofocus('profileId')
@@ -126,50 +132,48 @@
             },
             select: function(start, end, jsEvent, view) {
 
-                // Appointment modal
+                // Manage modal
                 isNotPast(start, dateFormat) ? appModal.modal('show') : alert('The date must not be in the past.')
 
-                $(".modal-title i").addClass('fa-calendar')
-                $(".modal-title span").text('New appointment')
-                $(".app-button").addClass('bg-indigo-dark text-white').text('Create appointment').attr('id', 'storeApp')
+                modalTitleIcon.addClass('fa-calendar')
+                modalTitleSpan.text('New appointment')
+                appButton.addClass('bg-indigo-dark text-white').text('Schedule appointment').attr('id', 'storeApp')
+                deleteButton.hide()
 
-                // Appointment form
+                // Manage form
                 var appDate = eventDate(start, dateFormat)
                 var appStart = eventStart(view, start, timeFormat)
 
-                profileField.val(profileName).attr('disabled', 'disabled')
+                profileField.val(profileName).attr('disabled', true)
                 dateField.val(appDate)
                 startField.val(appStart)
-                genderField.removeAttr('disabled')
-                fNameField.removeAttr('disabled')
-                lNameField.removeAttr('disabled')
-                birthdayField.removeAttr('disabled')
-                phoneField.removeAttr('disabled')
+                removeAttribute(disabledFields, 'disabled')
             },
             eventClick: function(event, jsEvent, view)
             {
                 appModal.modal('show')
 
-                $(".modal-title i").addClass('fa-calendar')
-                $(".modal-title span").text('Edit appointment')
-                $(".app-button").addClass('bg-indigo-dark text-white').text('Save changes').attr('id', 'updateApp').val(event.id)
+                modalTitleIcon.addClass('fa-calendar')
+                modalTitleSpan.text('Edit appointment')
+                appButton.addClass('bg-indigo-dark text-white').text('Reschedule').attr('id', 'updateApp').val(event.id)
+                deleteButton.show().val(event.id)
 
                 var patient = event.patient
                 var appDate = eventDate(event.start, dateFormat)
                 var appStart = eventStart(view, event.start, timeFormat)
                 var birthday = eventDate(moment(patient.birthday), dateFormat)
 
-                profileField.val(profileName).attr('disabled', 'disabled')
+                profileField.val(profileName).attr('disabled', true)
                 dateField.val(appDate)
                 startField.val(appStart)
-                $("input[name="+genderRadio+"][value="+patient.gender+"]").prop('checked', true).attr('disabled', 'disabled')
-                fNameField.val(patient.f_name).attr('disabled', 'disabled')
-                lNameField.val(patient.l_name).attr('disabled', 'disabled')
-                birthdayField.val(birthday).attr('disabled', 'disabled')
-                phoneField.val(patient.phone).attr('disabled', 'disabled')
+                $("input[name="+genderRadio+"][value="+patient.gender+"]").prop('checked', true)
+                fNameField.val(patient.f_name)
+                lNameField.val(patient.l_name)
+                birthdayField.val(birthday)
+                phoneField.val(patient.phone)
+                addAttribute(disabledFields, 'disabled')
             }
         })
-
 
         // Store appointment
         $(document).on('click', '#storeApp', function() {
@@ -209,18 +213,17 @@
             var appId = $(this).val()
             var updateAppUrl = appointmentsUrl + '/' + appId
 
-            // Get the app object
             var appointment = {
                 app_date: dateField.val(),
                 app_start: startField.val(),
             }
 
-            // Get the FC event object
+            // Event obj
             var appEvent = calendar.fullCalendar('clientEvents', appId); // array
 
             var appTime = appointment.app_date + ' ' + timeFormatted(appointment.app_start)
 
-            // Event title & color are left unchanged
+            // Event obj title & color left unchanged
             appEvent[0].start = appTime
 
             $.ajax({
@@ -229,13 +232,31 @@
                 data: appointment,
                 success: function(response)
                 {
-                    calendar.fullCalendar('updateEvent', appEvent[0]);
-
                     successResponse(appModal, response.message)
+
+                    calendar.fullCalendar('updateEvent', appEvent[0]);
                 },
                 error: function(response)
                 {
                     errorResponse(response.responseJSON.errors, appModal)
+                }
+            })
+        })
+
+        // Delete appointment
+        $(document).on('click', '#deleteApp', function(){
+
+            var appId = $(this).val()
+            var deleteAppUrl = appointmentsUrl + '/' + appId
+
+            $.ajax({
+                url: deleteAppUrl,
+                type: 'DELETE',
+                success : function(response)
+                {
+                    successResponse(appModal, response.message)
+
+                    calendar.fullCalendar('removeEvents', appId)
                 }
             })
         })

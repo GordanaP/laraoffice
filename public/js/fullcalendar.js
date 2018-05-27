@@ -31,7 +31,7 @@ function isNotPast(momentDate, dateFormat)
     var selectedDate = momentDate.format(dateFormat);
     var today = moment().format(dateFormat);
 
-    return selectedDate >= today;
+    return selectedDate >= today
 }
 
 /**

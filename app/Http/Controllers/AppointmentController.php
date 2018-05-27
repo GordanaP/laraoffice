@@ -57,7 +57,7 @@ class AppointmentController extends Controller
 
         if(request()->ajax())
         {
-            return message('A new appointment has been created');
+            return message('A new appointment has been made');
         }
         else
         {
@@ -100,7 +100,7 @@ class AppointmentController extends Controller
 
         if(request()->ajax())
         {
-            return message('The appointment has been updated');
+            return message('The appointment has been resceduled');
         }
         else
         {
@@ -114,8 +114,10 @@ class AppointmentController extends Controller
      * @param  \App\Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Appointment $appointment)
+    public function destroy(Profile $profile, Appointment $appointment)
     {
-        //
+        $appointment->delete();
+
+        return message('The appointment has been cancelled');
     }
 }

@@ -515,3 +515,16 @@ function getProfileId(profileId, profileField)
     return profileId ? profileId : profileField.val()
 }
 
+function removeAttribute(fields, attribute)
+{
+    $.each(fields, function(index, field) {
+         field.removeAttr(attribute)
+    })
+}
+
+function addAttribute(fields, attribute)
+{
+    $.each(fields, function(index, field) {
+         field.attr(attribute, true)
+    })
+}

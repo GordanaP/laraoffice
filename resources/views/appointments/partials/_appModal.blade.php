@@ -13,10 +13,14 @@
                     <div class="modal-body">
                         @include('appointments.partials._appForm')
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn pull-left close-button" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-default cancel-button" data-dismiss="modal"></button>
-                        <button type="button" class="btn app-button"></button>
+                    <div class="modal-footer flex">
+                        <div class="flex-1">
+                            <button type="button" class="btn app-button"></button>
+                            <button type="button" class="btn btn-danger cancel-button" data-dismiss="modal" id="deleteApp">Cancel</button>
+                        </div>
+                        <div>
+                            <button type="button" class="btn pull-left close-button" data-dismiss="modal">Cancel</button>
+                        </div>
                     </div>
                 </form>
             </div><!-- /.modal-content -->
