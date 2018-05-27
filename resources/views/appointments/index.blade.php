@@ -46,6 +46,8 @@
     <script>
 
         var calendar = $('#appointmentsCalendar'),
+            businessOpen = '10:00',
+            businessClose = '15:00',
             profileId = "{{ $profile->id }}",
             profileName = "{{ $profile->name }}",
             appointmentsUrl = "{{ route('appointments.index', $profile) }}",
@@ -101,8 +103,8 @@
                 },
                 {
                     dow: [ 6 ],
-                    start: '10:00',
-                    end: '15:00'
+                    start: businessOpen,
+                    end: businessClose
                 }
             ],
             minTime: "09:00",
@@ -124,7 +126,7 @@
             defaultTimedEventDuration: slotDuration(profileId, profilesAppInt20, 20),
             dayRender: function (date, cell) {
 
-                var day = moment(date).day()
+                var day = getDay(date)
 
                 if($.inArray(day, profileWorkdays) !== -1) {
                     cell.css("background-color", "#E3FCEC");
@@ -132,8 +134,7 @@
             },
             select: function(start, end, jsEvent, view) {
 
-                // Manage modal
-                isNotPast(start, dateFormat) ? appModal.modal('show') : alert('The date must not be in the past.')
+                disableInvalidDateOrTime(start, dateFormat, timeFormat, businessOpen, businessClose, appModal)
 
                 modalTitleIcon.addClass('fa-calendar')
                 modalTitleSpan.text('New appointment')
@@ -151,7 +152,7 @@
             },
             eventClick: function(event, jsEvent, view)
             {
-                appModal.modal('show')
+                appModal.open()
 
                 modalTitleIcon.addClass('fa-calendar')
                 modalTitleSpan.text('Edit appointment')
@@ -221,7 +222,7 @@
             // Event obj
             var appEvent = calendar.fullCalendar('clientEvents', appId); // array
 
-            var appTime = appointment.app_date + ' ' + timeFormatted(appointment.app_start)
+            var appTime = appointment.app_date + ' ' + timeTimestamp(appointment.app_start)
 
             // Event obj title & color left unchanged
             appEvent[0].start = appTime

@@ -166,7 +166,7 @@ function errorResponse(errors, modal)
     }
     else {
         userNotification("This action is unauthorized", "error")
-        modal.modal("hide")
+        modal.close()
     }
 }
 
@@ -289,7 +289,7 @@ function clearJSError(field)
 function successResponse(modal, message)
 {
     userNotification(message)
-    modal.modal("hide")
+    modal.close()
 }
 
 /**
@@ -377,6 +377,16 @@ $.fn.emptyModal = function(fields, form)
         // Clear the client side errors
         form.formValidation('resetForm', true);
     })
+}
+
+$.fn.open = function()
+{
+    $(this).modal('show')
+}
+
+$.fn.close = function()
+{
+    $(this).modal('hide')
 }
 
 /**
