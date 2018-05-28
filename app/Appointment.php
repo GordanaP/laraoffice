@@ -48,7 +48,12 @@ class Appointment extends Model
 
     public static function createNew($data)
     {
-        $patient = Patient::createOrUpdate($data);
+        $patient = Patient::where('record', medicalRecord($data['birthday'], $data['f_name'], $data['l_name']))->first();
+
+        if(! $patient)
+        {
+            $patient = Patient::createOrUpdate($data);
+        }
 
         $appointment = new static;
 

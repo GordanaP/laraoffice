@@ -538,3 +538,8 @@ function addAttribute(fields, attribute)
          field.attr(attribute, true)
     })
 }
+
+function fullName(firstName, lastName)
+{
+    return firstName + ' ' + lastName
+}

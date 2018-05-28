@@ -34,6 +34,7 @@ class Patient extends Model
         $patient->birthday = Carbon::createFromFormat('Y-m-d', $data['birthday']);
         $patient->gender = $data['gender'];
         $patient->phone = $data['phone'];
+        $patient->record = medicalRecord($data['birthday'], $data['f_name'], $data['l_name']);
 
         $patient->save();
 

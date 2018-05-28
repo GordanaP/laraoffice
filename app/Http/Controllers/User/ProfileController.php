@@ -33,7 +33,7 @@ class ProfileController extends Controller
             $user = User::findBy($userId, 'id');
 
             return [
-                'profile' => $user->profile ?? '',
+                'profile' => $user->profile->load('workdays') ?? '',
             ];
         }
     }

@@ -44,10 +44,12 @@
     <script src="{{ asset('vendor/timepicker-1.6.3/timepicker-addon.js') }}"></script>
 
     <script>
-
         var calendar = $('#appointmentsCalendar'),
-            businessOpen = '10:00',
-            businessClose = '15:00',
+            timezone = "{{ config('app.timezone') }}",
+            standardBusinessOpen = '09:00',
+            standardBusinessClose = '20:00',
+            satBusinessOpen = '10:00',
+            satBusinessClose = '15:00',
             profileId = "{{ $profile->id }}",
             profileName = "{{ $profile->name }}",
             appointmentsUrl = "{{ route('appointments.index', $profile) }}",
@@ -69,9 +71,12 @@
             appButton = $(".app-button"),
             deleteButton = $("#deleteApp"),
             dateFormat = "YYYY-MM-DD",
-            timeFormat = "HH:mm",
+            timeFormat = "HH:mm"
+
             appFormFields = ['profile_id','app_date', 'app_start', 'gender', 'f_name', 'l_name', 'birthday', 'phone']
             disabledFields = [ genderField, fNameField, lNameField, birthdayField, phoneField ]
+            standardBusinessDays = [1, 2, 3, 4, 5]
+            saturday = [ 6 ]
 
         appModal.emptyModal(appFormFields)
         appModal.setAutofocus('profileId')
@@ -86,10 +91,10 @@
             fixedWeekCount:false,
             handleWindowResize: true,
             displayEventTime: false,
-            showNonCurrentDates: true,  // out of the current view
+            showNonCurrentDates: true,
             allDaySlot:true,
-            slotLabelFormat: 'H:mm', // 16:00
-            slotDuration: slotDuration(profileId, profilesAppInt20, 20), //
+            slotLabelFormat: timeFormat, // 16:00
+            slotDuration: slotDuration(profileId, profilesAppInt20, 20),
             firstDay: 1,
             navLinks: true,
             selectHelper: true,
@@ -97,29 +102,32 @@
             selectable: true,
             businessHours: [
                 {
-                    dow: [ 1, 2, 3, 4, 5 ],
-                    start: '09:00',
-                    end: '20:00'
+                    dow : [1,2,3,4,5],
+                    start: standardBusinessOpen,
+                    end: standardBusinessClose,
                 },
                 {
-                    dow: [ 6 ],
-                    start: businessOpen,
-                    end: businessClose
+                    dow: saturday,
+                    start: satBusinessOpen,
+                    end: satBusinessClose
                 }
             ],
-            minTime: "09:00",
-            maxTime: "20:00",
+            minTime: standardBusinessOpen,
+            maxTime: standardBusinessClose,
             eventLimit: true,
-            timezone: 'Europe/Belgrade',
+            timezone: timezone,
             events:  {
                 url: appointmentsUrl,
                 textColor: 'black',
-                timeFormat: 'H:mm'
+                timeFormat: timeFormat
             },
             //transform event attributes into event object attributes
             eventDataTransform: function(event) {
-                event.title = event.patient.f_name + ' ' + event.patient.l_name
+
+                event.title = fullName(event.patient.f_name, event.patient.l_name)
+                event.description = event.patient.record + "<br>" + event.start + "</br>"
                 event.color = event.profile.color
+
                 return event;
             },
             //override default "02:00:00" when the event end is not defined
@@ -134,7 +142,8 @@
             },
             select: function(start, end, jsEvent, view) {
 
-                disableInvalidDateOrTime(start, dateFormat, timeFormat, businessOpen, businessClose, appModal)
+                // Manage modal
+                disableInvalidDateOrTime(start, dateFormat, timeFormat, satBusinessOpen, satBusinessClose, appModal)
 
                 modalTitleIcon.addClass('fa-calendar')
                 modalTitleSpan.text('New appointment')
@@ -173,6 +182,16 @@
                 birthdayField.val(birthday)
                 phoneField.val(patient.phone)
                 addAttribute(disabledFields, 'disabled')
+            },
+            eventRender: function(event, element) {
+                element.popover ({
+                    title: event.title,
+                    content: event.description,
+                    html: true,
+                    trigger: 'hover',
+                    placement: 'top',
+                    container: 'body'
+                })
             }
         })
 

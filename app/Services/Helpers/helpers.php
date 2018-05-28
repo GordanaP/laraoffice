@@ -191,9 +191,9 @@ function pastYears($day, $years, $format='Y-m-d')
  * @param string $day
  * @param string $format
  */
-function setDate($day, $format='Y-m-d')
+function setDate($date, $format='Y-m-d')
 {
-    return $day->format($format);
+    return $date->format($format);
 }
 
 /**
@@ -202,6 +202,11 @@ function setDate($day, $format='Y-m-d')
  * @param string $format
  */
 function setDay($date, $format='l')
+{
+    return date($format, strtotime($date));
+}
+
+function dateFormattedPHP($date, $format)
 {
     return date($format, strtotime($date));
 }
@@ -229,4 +234,24 @@ function workingHours($start, $breakpoint, $end)
     }
 
     return $filteredHours->all();
+}
+
+/**
+ * Get the medical record number
+ *
+ * @param  [string] $date
+ * @param  [string] $f_name
+ * @param  [string] $l_name
+ * @return [string]
+ */
+function medicalRecord($birthday, $f_name, $l_name)
+{
+    $day = dateFormattedPHP($birthday, 'd');
+    $month = dateFormattedPHP($birthday, 'm');
+    $year = substr(dateFormattedPHP($birthday, 'Y'), 1);
+    $f_name = strtoupper(substr($f_name, 0, 2));
+    $l_name = strtoupper(substr($l_name, 0, 2));
+
+    return $day.$month.$year.$f_name.$l_name;
+
 }
