@@ -94,8 +94,9 @@ class AppointmentController extends Controller
      * @param  \App\Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
-    public function update(Profile $profile, Appointment $appointment, AppointmentRequest $request)
+    public function update(Profile $profile, Appointment $appointment, Request $request)
     {
+        // return \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $request->app_date.'  '.'12:00:00');
         $appointment->saveChanges($request);
 
         if(request()->ajax())

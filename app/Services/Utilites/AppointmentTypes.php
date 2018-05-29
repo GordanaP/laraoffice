@@ -5,10 +5,10 @@ namespace App\Services\Utilities;
 class AppointmentTypes
 {
     protected static $types = [
-        'EG' => 'Vision correction exam',
-        'CL' => 'Vision correction exam',
+        'EG' => 'Vision correction eyglasses',
+        'CL' => 'Vision correction contact lenses',
         'SE' => 'Standard exam',
-        'SSE' => 'Expert exam',
+        'EE' => 'Expert exam',
         'FUP' => 'Follow up'
     ];
 

@@ -26,18 +26,6 @@
     </div>
 </div>
 
-<div class="form-group">
-    <label for="app_type">Appointment type</label>
-    <select name="app_type" id="app_type" class="form-control app_type">
-        <option value="">Select an appointment type</option>
-        @foreach (AppointmentTypes::all() as $key => $value)
-            <option value="{{ $key }}">{{ $value }}</option>
-        @endforeach
-    </select>
-
-    <span class="invalid-feedback app_type"></span>
-</div>
-
 <p class="mb-2">
     <span class="text-uppercase mr-2">Patient details</span>
     <a id="patientLink" href="" target="_blank"><strong>Read More</strong></a>

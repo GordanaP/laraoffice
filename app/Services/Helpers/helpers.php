@@ -169,7 +169,7 @@ function weekdayId($day)
  */
 function getEventDate($date, $time, $format='Y-m-d H:i')
 {
-    return Carbon::createFromFormat($format, $date.' '.$time)->toDateTimeString();
+    return Carbon::createFromFormat($format, $date.' '.$time);
 }
 
 /**

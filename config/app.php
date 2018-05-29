@@ -212,6 +212,7 @@ return [
         'AvatarOptions' => App\Services\Utilities\AvatarOptions::class,
         'WorkingHours' => App\Services\Utilities\WorkingHours::class,
         'AppointmentTypes' => App\Services\Utilities\AppointmentTypes::class,
+        'AppointmentStatus' => App\Services\Utilities\AppointmentStatus::class,
     ],
 
 ];

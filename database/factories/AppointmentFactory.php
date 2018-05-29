@@ -10,6 +10,5 @@ $factory->define(App\Appointment::class, function (Faker $faker) {
         'profile_id' => Profile::first()->id,
         'patient_id' => Patient::all()->random()->id,
         'start' => now(),
-        'type' => array_rand(AppointmentTypes::all())
     ];
 });

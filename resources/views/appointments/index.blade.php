@@ -68,7 +68,6 @@
             lNameField = $("#l_name"),
             birthdayField = $("#birthday"),
             phoneField = $("#phone"),
-            appTypeField = $('#app_type'),
             appButton = $(".app-button"),
             deleteButton = $("#deleteApp"),
             patientLink = $("#patientLink"),
@@ -126,8 +125,8 @@
             //transform event attributes into event object attributes
             eventDataTransform: function(event) {
 
-                event.title = fullName(event.patient.f_name, event.patient.l_name) + ' ' + event.type
-                event.description = event.patient.record + getConditionalValue(event.outcome)
+                event.title = fullName(event.patient.f_name, event.patient.l_name)
+                event.description = event.patient.record
                 event.color = event.profile.color
 
                 return event;
@@ -185,7 +184,6 @@
                 lNameField.val(patient.l_name)
                 birthdayField.val(birthday)
                 phoneField.val(patient.phone)
-                appTypeField.val(event.type)
                 addAttribute(disabledFields, 'disabled')
             },
             eventRender: function(event, element) {
@@ -212,7 +210,6 @@
                 l_name: lNameField.val(),
                 birthday: birthdayField.val(),
                 phone: phoneField.val(),
-                app_type: appTypeField.val()
             }
 
             $.ajax({
@@ -242,18 +239,16 @@
             var appointment = {
                 app_date: dateField.val(),
                 app_start: startField.val(),
-                app_type: appTypeField.val(),
             }
 
             // Event obj
             var appEvent = calendar.fullCalendar('clientEvents', appId); // array
 
             var appTime = appointment.app_date + ' ' + timeTimestamp(appointment.app_start)
-            var appType = appointment.app_type
 
             // Event obj title & color left unchanged
             appEvent[0].start = appTime
-            appEvent[0].title = fullName(fNameField.val(), lNameField.val()) + ' ' +appType
+            appEvent[0].title = fullName(fNameField.val(), lNameField.val())
 
             $.ajax({
                 url: updateAppUrl,

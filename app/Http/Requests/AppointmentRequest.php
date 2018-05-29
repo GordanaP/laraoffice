@@ -37,7 +37,6 @@ class AppointmentRequest extends FormRequest
                         'required','date_format:Y-m-d','after_or_equal:today',
                         new Workdays($this->profile)
                     ],
-                    'app_type' => 'required',
                     'gender' => [
                         'required',
                         Rule::in(['M', 'F'])

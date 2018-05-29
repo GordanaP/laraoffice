@@ -58,7 +58,6 @@ class Appointment extends Model
         $appointment = new static;
 
         $appointment->start = getEventDate($data['app_date'], $data['app_start']);
-        $appointment->type = $data['app_type'];
         $appointment->profile()->associate($data['profile_id']);
 
         $patient->appointments()->save($appointment);
@@ -67,7 +66,6 @@ class Appointment extends Model
     public function saveChanges($data)
     {
         $this->start = getEventDate($data['app_date'], $data['app_start']);
-        $this->type = $data['app_type'];
 
         $this->save();
     }
