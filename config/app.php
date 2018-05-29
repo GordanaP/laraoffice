@@ -211,6 +211,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'AvatarOptions' => App\Services\Utilities\AvatarOptions::class,
         'WorkingHours' => App\Services\Utilities\WorkingHours::class,
+        'AppointmentTypes' => App\Services\Utilities\AppointmentTypes::class,
     ],
 
 ];

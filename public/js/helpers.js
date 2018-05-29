@@ -543,3 +543,8 @@ function fullName(firstName, lastName)
 {
     return firstName + ' ' + lastName
 }
+
+function getConditionalValue(value)
+{
+    return value ? '<br>Outcome: ' + value + '</br>' : ' '
+}

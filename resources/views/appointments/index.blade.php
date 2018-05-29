@@ -68,8 +68,10 @@
             lNameField = $("#l_name"),
             birthdayField = $("#birthday"),
             phoneField = $("#phone"),
+            appTypeField = $('#app_type'),
             appButton = $(".app-button"),
             deleteButton = $("#deleteApp"),
+            patientLink = $("#patientLink"),
             dateFormat = "YYYY-MM-DD",
             timeFormat = "HH:mm"
 
@@ -124,8 +126,8 @@
             //transform event attributes into event object attributes
             eventDataTransform: function(event) {
 
-                event.title = fullName(event.patient.f_name, event.patient.l_name)
-                event.description = event.patient.record + "<br>" + event.start + "</br>"
+                event.title = fullName(event.patient.f_name, event.patient.l_name) + ' ' + event.type
+                event.description = event.patient.record + getConditionalValue(event.outcome)
                 event.color = event.profile.color
 
                 return event;
@@ -149,6 +151,7 @@
                 modalTitleSpan.text('New appointment')
                 appButton.addClass('bg-indigo-dark text-white').text('Schedule appointment').attr('id', 'storeApp')
                 deleteButton.hide()
+                patientLink.hide()
 
                 // Manage form
                 var appDate = eventDate(start, dateFormat)
@@ -167,6 +170,7 @@
                 modalTitleSpan.text('Edit appointment')
                 appButton.addClass('bg-indigo-dark text-white').text('Reschedule').attr('id', 'updateApp').val(event.id)
                 deleteButton.show().val(event.id)
+                patientLink.show().attr('href', "{{ route('home') }}")
 
                 var patient = event.patient
                 var appDate = eventDate(event.start, dateFormat)
@@ -181,13 +185,15 @@
                 lNameField.val(patient.l_name)
                 birthdayField.val(birthday)
                 phoneField.val(patient.phone)
+                appTypeField.val(event.type)
                 addAttribute(disabledFields, 'disabled')
             },
             eventRender: function(event, element) {
+
                 element.popover ({
-                    title: event.title,
-                    content: event.description,
-                    html: true,
+                    title: event.title ? event.title : '',
+                    content: event.description ? event.description : '',
+                    html: true, // important for <br>
                     trigger: 'hover',
                     placement: 'top',
                     container: 'body'
@@ -197,7 +203,6 @@
 
         // Store appointment
         $(document).on('click', '#storeApp', function() {
-
             var appointment = {
                 profile_id: getProfileId(profileId, profileField),
                 app_date: dateField.val(),
@@ -207,6 +212,7 @@
                 l_name: lNameField.val(),
                 birthday: birthdayField.val(),
                 phone: phoneField.val(),
+                app_type: appTypeField.val()
             }
 
             $.ajax({
@@ -236,15 +242,18 @@
             var appointment = {
                 app_date: dateField.val(),
                 app_start: startField.val(),
+                app_type: appTypeField.val(),
             }
 
             // Event obj
             var appEvent = calendar.fullCalendar('clientEvents', appId); // array
 
             var appTime = appointment.app_date + ' ' + timeTimestamp(appointment.app_start)
+            var appType = appointment.app_type
 
             // Event obj title & color left unchanged
             appEvent[0].start = appTime
+            appEvent[0].title = fullName(fNameField.val(), lNameField.val()) + ' ' +appType
 
             $.ajax({
                 url: updateAppUrl,
